@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthcord/components/database.dart';
 import 'components/home.dart';
 
 
@@ -10,12 +11,13 @@ class HealthCord extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
+    PatientDatabase.instance.database;
     return MaterialApp(
       title: 'HealthCord',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: ThemeData(useMaterial3: true),
-      home: const Home()
+      home: const Home(),
     );
   }
 }

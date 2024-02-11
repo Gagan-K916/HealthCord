@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:healthcord/components/patients.dart';
 import '../constants/app_colors.dart';
 import '../constants/measures.dart';
-import 'greeting.dart';
+import 'dashboard.dart';
+import 'appointments.dart';
+import 'prescriptions.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
@@ -145,18 +148,15 @@ class _HomeState extends State<Home> {
                         )
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: defaultPadding + 20,
-                          left: defaultPadding,
-                          right: defaultPadding),
-                      child: Container(
-                          height: 120,
-                          decoration: const BoxDecoration(
-                              color: primaryColor,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(circularRadius))),
-                          child: Greeting(username)),
+                    IndexedStack(
+                      index: _selectedIndex,
+                      children: [
+                        Container(),
+                        dashboard(username),
+                        patients(),
+                        Appointments(),
+                        Prescriptions()
+                      ],
                     )
                   ])))
         ]),
