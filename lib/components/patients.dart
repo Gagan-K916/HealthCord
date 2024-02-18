@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:healthcord/components/database.dart';
+import 'package:healthcord/components/models/patient.dart';
 import 'package:healthcord/constants/app_colors.dart';
 import 'package:healthcord/constants/measures.dart';
+import 'package:sqflite/sqflite.dart';
 
-void _showAddPatient(BuildContext context) {
+
+
+class patients extends StatefulWidget{
+  const patients({super.key});
+
+  PatientsState createState()=> PatientsState();
+}
+
+ class PatientsState extends State<patients>{
+  final searchController = TextEditingController();
+
+  Future<List<DataRow>> patientsRowFuture = Future.value([]);
+
+  void _showAddPatient(BuildContext context) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -14,109 +29,102 @@ void _showAddPatient(BuildContext context) {
         height: 410,
         child: Align(
           alignment: Alignment.center,
-          child: addPatientPage()),
+          child: addPatientPage(context)),
       ),
     );
   }
 
-Widget addPatientPage(){
-    final dobController = TextEditingController();
-    final emailController = TextEditingController();
-    final fNameController = TextEditingController();
-    final genderController = TextEditingController();
-    final lNameController = TextEditingController();
-    final phoneController = TextEditingController();
-    return SizedBox(
-      height: double.maxFinite,
-      child: Column(
-        children: [
-            TextField(
-            controller: fNameController ,
+  Widget addPatientPage(BuildContext context){
+  final dobController = TextEditingController();
+  final emailController = TextEditingController();
+  final fNameController = TextEditingController();
+  final genderController = TextEditingController();
+  final lNameController = TextEditingController();
+  final phoneController = TextEditingController();
+  return SizedBox(
+    height: double.maxFinite,
+    child: Column(
+      children: [
+          TextField(
+          controller: fNameController ,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.perm_identity_outlined),
+            hintText: "First Name",
+            
+            ),
+            style: GoogleFonts.rubik(),
+          ),
+          TextField(
+            controller: lNameController ,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.perm_identity_outlined),
-              hintText: "First Name",
-              
-              ),
-              style: GoogleFonts.rubik(),
+            prefixIcon: Icon(Icons.perm_identity_outlined),
+            hintText: "Last Name",
             ),
-            TextField(
-              controller: lNameController ,
-              decoration: InputDecoration(
-              prefixIcon: Icon(Icons.perm_identity_outlined),
-              hintText: "Last Name",
-              ),
-              style: GoogleFonts.rubik()
+            style: GoogleFonts.rubik()
+          ),
+          DropdownMenu(
+            inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
+            leadingIcon: Icon(Icons.male_rounded),
+            hintText: "Gender",
+            width: 640,
+            controller: genderController,
+            dropdownMenuEntries: [
+              DropdownMenuEntry(value: 'Male', label: 'Male'),
+              DropdownMenuEntry(value: 'Female', label: 'Female')
+            ],textStyle: GoogleFonts.rubik()),
+          TextField(
+          controller: emailController ,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.email_rounded),
+            hintText: "Email",
             ),
-            DropdownMenu(
-              inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
-              leadingIcon: Icon(Icons.male_rounded),
-              hintText: "Gender",
-              width: 640,
-              controller: genderController,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: 'Male', label: 'Male'),
-                DropdownMenuEntry(value: 'Female', label: 'Female')
-              ],textStyle: GoogleFonts.rubik()),
-            TextField(
-            controller: emailController ,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.email_rounded),
-              hintText: "Email",
-              ),
-              style: GoogleFonts.rubik()
+            style: GoogleFonts.rubik()
+          ),
+          TextField(
+          controller: phoneController ,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.phone_in_talk_sharp),
+            hintText: "Phone",
             ),
-            TextField(
-            controller: phoneController ,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.phone_in_talk_sharp),
-              hintText: "Phone",
-              ),
-              style: GoogleFonts.rubik()
+            style: GoogleFonts.rubik()
+          ),
+          TextField(
+          controller: dobController ,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.cake_rounded),
+            hintText: "Date of Birth (YYYY-MM-DD)",
             ),
-            TextField(
-            controller: dobController ,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.cake_rounded),
-              hintText: "Date of Birth (YYYY-MM-DD)",
-              ),
-              style: GoogleFonts.rubik()
-            ),
-            SizedBox(height: 30,),
-            ElevatedButton(onPressed: (){
-              fName = fNameController.text;
-              lName = lNameController.text;
-              email = emailController.text;
-              phone = phoneController.text;
-              gender = genderController.text;
-              dob = dobController.text;
-            }, 
-            style:ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-                fixedSize: Size(200,50),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(circularRadius - 10)))),
-            child: Text("ADD", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),))
-        ],
-      )
-    );
+            style: GoogleFonts.rubik()
+          ),
+          SizedBox(height: 30,),
+          ElevatedButton(onPressed: () async{
+            Database db = await PatientDatabase.instance.database;
+            await insertPatient(db, fNameController.text, lNameController.text, genderController.text, emailController.text, phoneController.text, dobController.text);
+            setState(() {
+              patientsRowFuture = getPatientRowData();
+            });
+            Navigator.pop(context);
+          }, 
+          style:ElevatedButton.styleFrom(
+            backgroundColor: primaryColor,
+              fixedSize: Size(200,50),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(circularRadius - 10)))),
+          child: Text("ADD", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),))
+      ],
+    )
+  );
+}
+
+  void refreshTable(){
+    setState(() {
+      patientsRowFuture = getPatientRowData();
+    });
   }
-}
-
-class patients extends StatefulWidget{
-  const patients({super.key});
-
-  _PatientsState createState()=> _PatientsState();
-}
-
-class _PatientsState extends State<patients>{
-  final searchController = TextEditingController();
-
-  Future<List<DataRow>> _patientsRowFuture = Future.value([]);
-
 
   @override
   void initState() {
-    _patientsRowFuture = getPatientRowData();
+    patientsRowFuture = getPatientRowData();
     super.initState();  
   }
 
@@ -176,7 +184,7 @@ class _PatientsState extends State<patients>{
     )
     ,
     FutureBuilder(
-      future: _patientsRowFuture, 
+      future: patientsRowFuture, 
       builder: (context, snapshot){
         if (snapshot.connectionState == ConnectionState.done){
           return Container(

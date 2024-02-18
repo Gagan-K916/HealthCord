@@ -18,3 +18,7 @@ Future <Database> initializePatients(Database db) async{
     );
   return db;
 }
+
+Future <void> insertPatient(Database db, String firstName, lastName, gender, email, phone, dob) async{
+  await db.execute("INSERT INTO PATIENT (First_Name, Last_Name, Email, Phone, DOB, Gender) VALUES ('$firstName', '$lastName', '$email', '$phone', '$dob', '$gender');");
+}

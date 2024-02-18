@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:healthcord/constants/app_colors.dart';
 import 'package:healthcord/constants/measures.dart';
 import 'greeting.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class PatientCard1 extends StatefulWidget{
   const PatientCard1({super.key});
