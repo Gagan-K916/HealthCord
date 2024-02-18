@@ -22,3 +22,30 @@ Future <Database> initializePatients(Database db) async{
 Future <void> insertPatient(Database db, String firstName, lastName, gender, email, phone, dob) async{
   await db.execute("INSERT INTO PATIENT (First_Name, Last_Name, Email, Phone, DOB, Gender) VALUES ('$firstName', '$lastName', '$email', '$phone', '$dob', '$gender');");
 }
+
+Future <List<Map<String, dynamic>>> getFilteredPatients(Database db, String searchKey) async{
+  return await db.rawQuery('''
+    SELECT * 
+    FROM PATIENT
+    WHERE First_Name LIKE '%$searchKey%'
+
+    UNION
+
+    SELECT *
+    FROM PATIENT  
+    WHERE Last_Name LIKE '%$searchKey%'
+
+    UNION 
+
+    SELECT * 
+    FROM PATIENT
+    WHERE Email LIKE '%$searchKey%'
+
+    UNION
+
+    SELECT *
+    FROM PATIENT
+    WHERE Phone LIKE '%$searchKey%';
+    '''
+  );
+}
