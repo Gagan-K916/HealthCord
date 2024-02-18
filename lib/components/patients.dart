@@ -14,28 +14,18 @@ void _showAddPatient(BuildContext context) {
         height: 410,
         child: Align(
           alignment: Alignment.center,
-          child: AddPatientPage()),
+          child: addPatientPage()),
       ),
     );
   }
 
-class AddPatientPage extends StatefulWidget {
-  const AddPatientPage({super.key});
-
-  AddPatientState createState() => AddPatientState();
-}
-
-class AddPatientState extends State<AddPatientPage>{
-  String? id, fName, lName, email, phone, gender, dob;
-  final dobController = TextEditingController();
-  final emailController = TextEditingController();
-  final fNameController = TextEditingController();
-  final genderController = TextEditingController();
-  final lNameController = TextEditingController();
-  final phoneController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
+Widget addPatientPage(){
+    final dobController = TextEditingController();
+    final emailController = TextEditingController();
+    final fNameController = TextEditingController();
+    final genderController = TextEditingController();
+    final lNameController = TextEditingController();
+    final phoneController = TextEditingController();
     return SizedBox(
       height: double.maxFinite,
       child: Column(
