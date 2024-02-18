@@ -4,7 +4,6 @@ import 'components/home.dart';
 
 
 void main() async{
-  bool isInitialized = false;
   await PatientDatabase.instance.database;
   runApp(const HealthCord());
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:healthcord/components/database.dart';
+import 'package:healthcord/components/models/patient.dart';
 import 'package:healthcord/constants/app_colors.dart';
 import 'package:healthcord/constants/measures.dart';
+import 'package:sqflite/sqflite.dart';
 
 void _showAddPatient(BuildContext context) {
     showModalBottomSheet(
@@ -26,7 +28,6 @@ class AddPatientPage extends StatefulWidget {
 }
 
 class AddPatientState extends State<AddPatientPage>{
-  String? id, fName, lName, email, phone, gender, dob;
   final dobController = TextEditingController();
   final emailController = TextEditingController();
   final fNameController = TextEditingController();
@@ -92,13 +93,10 @@ class AddPatientState extends State<AddPatientPage>{
               style: GoogleFonts.rubik()
             ),
             SizedBox(height: 30,),
-            ElevatedButton(onPressed: (){
-              fName = fNameController.text;
-              lName = lNameController.text;
-              email = emailController.text;
-              phone = phoneController.text;
-              gender = genderController.text;
-              dob = dobController.text;
+            ElevatedButton(onPressed: () async{
+              Database db = await PatientDatabase.instance.database;
+              await insertPatient(db, fNameController.text, lNameController.text, genderController.text, emailController.text, phoneController.text, dobController.text);
+              Navigator.pop(context);
             }, 
             style:ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
@@ -115,18 +113,23 @@ class AddPatientState extends State<AddPatientPage>{
 class patients extends StatefulWidget{
   const patients({super.key});
 
-  _PatientsState createState()=> _PatientsState();
+  PatientsState createState()=> PatientsState();
 }
 
-class _PatientsState extends State<patients>{
+ class PatientsState extends State<patients>{
   final searchController = TextEditingController();
 
-  Future<List<DataRow>> _patientsRowFuture = Future.value([]);
+  Future<List<DataRow>> patientsRowFuture = Future.value([]);
 
+  void refreshTable(){
+    setState(() {
+      patientsRowFuture = getPatientRowData();
+    });
+  }
 
   @override
   void initState() {
-    _patientsRowFuture = getPatientRowData();
+    patientsRowFuture = getPatientRowData();
     super.initState();  
   }
 
@@ -186,7 +189,7 @@ class _PatientsState extends State<patients>{
     )
     ,
     FutureBuilder(
-      future: _patientsRowFuture, 
+      future: patientsRowFuture, 
       builder: (context, snapshot){
         if (snapshot.connectionState == ConnectionState.done){
           return Container(
