@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
-Future <Database> initializePatients(Database? db) async{
-  await db!.execute('''
+Future <Database> initializePatients(Database db) async{
+  await db.execute('''
     CREATE TABLE IF NOT EXISTS PATIENT(
       Patient_ID INTEGER PRIMARY KEY,
       First_Name TEXT,

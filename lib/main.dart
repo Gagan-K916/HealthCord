@@ -3,7 +3,11 @@ import 'package:healthcord/components/database.dart';
 import 'components/home.dart';
 
 
-void main() => runApp(const HealthCord());
+void main() async{
+  bool isInitialized = false;
+  await PatientDatabase.instance.database;
+  runApp(const HealthCord());
+}
 
 class HealthCord extends StatelessWidget{
 
@@ -11,7 +15,6 @@ class HealthCord extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
-    PatientDatabase.instance.database;
     return MaterialApp(
       title: 'HealthCord',
       debugShowCheckedModeBanner: false,

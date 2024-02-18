@@ -10,9 +10,12 @@ void _showAddPatient(BuildContext context) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10)
       ),
-      builder: (_) => Align(
-        alignment: Alignment.center,
-        child: AddPatientPage()),
+      builder: (_) => Container(
+        height: 410,
+        child: Align(
+          alignment: Alignment.center,
+          child: AddPatientPage()),
+      ),
     );
   }
 
@@ -28,7 +31,6 @@ class AddPatientState extends State<AddPatientPage>{
   final emailController = TextEditingController();
   final fNameController = TextEditingController();
   final genderController = TextEditingController();
-  final idController = TextEditingController();
   final lNameController = TextEditingController();
   final phoneController = TextEditingController();
 
@@ -38,19 +40,14 @@ class AddPatientState extends State<AddPatientPage>{
       height: double.maxFinite,
       child: Column(
         children: [
-          TextField(
-            controller: idController,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.numbers_rounded),
-              hintText: "Patient ID",
-              ),
-          ),
             TextField(
             controller: fNameController ,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.perm_identity_outlined),
               hintText: "First Name",
+              
               ),
+              style: GoogleFonts.rubik(),
             ),
             TextField(
               controller: lNameController ,
@@ -58,20 +55,25 @@ class AddPatientState extends State<AddPatientPage>{
               prefixIcon: Icon(Icons.perm_identity_outlined),
               hintText: "Last Name",
               ),
+              style: GoogleFonts.rubik()
             ),
-            TextField(
-              controller: lNameController ,
-              decoration: InputDecoration(
-              prefixIcon: Icon(Icons.male_rounded),
+            DropdownMenu(
+              inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
+              leadingIcon: Icon(Icons.male_rounded),
               hintText: "Gender",
-              ),
-            ),
+              width: 640,
+              controller: genderController,
+              dropdownMenuEntries: [
+                DropdownMenuEntry(value: 'Male', label: 'Male'),
+                DropdownMenuEntry(value: 'Female', label: 'Female')
+              ],textStyle: GoogleFonts.rubik()),
             TextField(
             controller: emailController ,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.email_rounded),
               hintText: "Email",
               ),
+              style: GoogleFonts.rubik()
             ),
             TextField(
             controller: phoneController ,
@@ -79,24 +81,24 @@ class AddPatientState extends State<AddPatientPage>{
               prefixIcon: Icon(Icons.phone_in_talk_sharp),
               hintText: "Phone",
               ),
+              style: GoogleFonts.rubik()
             ),
             TextField(
             controller: dobController ,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.cake_rounded),
-              hintText: "Date of Birth",
+              hintText: "Date of Birth (YYYY-MM-DD)",
               ),
+              style: GoogleFonts.rubik()
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 30,),
             ElevatedButton(onPressed: (){
-              id = idController.text;
               fName = fNameController.text;
               lName = lNameController.text;
               email = emailController.text;
               phone = phoneController.text;
               gender = genderController.text;
               dob = dobController.text;
-              print("$fName $lName");
             }, 
             style:ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
@@ -133,13 +135,13 @@ class _PatientsState extends State<patients>{
     List<DataRow> rows = [];
     for(List<dynamic> patient in patients){
       rows.add(DataRow(cells: [
-        DataCell(Text(patient[0].toString())),
-        DataCell(Text(patient[1].toString())),
-        DataCell(Text(patient[2].toString())),
-        DataCell(Text(patient[3].toString())),
-        DataCell(Text(patient[4].toString())),
-        DataCell(Text(patient[5].toString())),
-        DataCell(Text(patient[6].toString()))
+        DataCell(Center(child: Text(patient[0].toString(), style: GoogleFonts.oswald(color: primaryColor, fontWeight: FontWeight.w600),))),
+        DataCell(Center(child: Text(patient[1].toString()))),
+        DataCell(Center(child: Text(patient[2].toString()))),
+        DataCell(Center(child: Text(patient[3].toString(),))),
+        DataCell(Center(child: Text(patient[4].toString()))),
+        DataCell(Center(child: Text(patient[5].toString()))),
+        DataCell(Center(child: Container(child: Center(child: Text(patient[6].toString(), style: GoogleFonts.nunito(fontWeight: FontWeight.w500),)), width: 70, height: 20 , decoration: BoxDecoration(color: patient[6].toString() == "Male" ? Colors.blue.shade300 :Colors.pink.shade200, borderRadius: BorderRadius.circular(circularRadius-15)))))
       ]));
     }
     return rows;
@@ -203,13 +205,13 @@ class _PatientsState extends State<patients>{
                   headingTextStyle: TextStyle(color: Colors.white),
                   border: TableBorder.all(color: Colors.grey, borderRadius: BorderRadius.circular(circularRadius)),
                   columns: const [
-                  DataColumn(label: Text('Patient ID')),
-                  DataColumn(label: Text('First Name')),
-                  DataColumn(label: Text('Last Name')),
-                  DataColumn(label: Text('Gender')),
-                  DataColumn(label: Text('Date of Birth')),
-                  DataColumn(label: Text('Email')),
-                  DataColumn(label: Text('Phone')),
+                  DataColumn(label: Center(child: Text('Patient ID'))),
+                  DataColumn(label: Center(child: Text('First Name'))),
+                  DataColumn(label: Center(child: Text('Last Name'))),
+                  DataColumn(label: Center(child: Text('Email'))),
+                  DataColumn(label: Center(child: Text('Phone'))),
+                  DataColumn(label: Center(child: Text('Date of Birth'))),
+                  DataColumn(label: Center(child: Text('Gender')))
                 ], rows: snapshot.data!
                 ),
               ),

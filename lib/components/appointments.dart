@@ -10,9 +10,12 @@ void _showAddAppointment(BuildContext context) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10)
       ),
-      builder: (_) => Align(
-        alignment: Alignment.center,
-        child: AddAppointmentPage()),
+      builder: (_) => SizedBox(
+        height: 340,
+        child: Align(
+          alignment: Alignment.center,
+          child: AddAppointmentPage()),
+      ),
     );
   }
 
@@ -45,6 +48,7 @@ class AddAppoinmentState extends State<AddAppointmentPage>{
               prefixIcon: Icon(Icons.numbers_rounded),
               hintText: "Appointment ID",
               ),
+              style: GoogleFonts.rubik()
           ),
             DropdownMenu(
               inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
@@ -54,13 +58,15 @@ class AddAppoinmentState extends State<AddAppointmentPage>{
               controller: patientNameController,
               dropdownMenuEntries: [
                 DropdownMenuEntry(value: 'Patient 1', label: 'Patient 1')
-              ],),
+              ],
+              textStyle: GoogleFonts.rubik()),
             TextField(
               controller: remarksController ,
               decoration: InputDecoration(
               prefixIcon: Icon(Icons.note_alt),
               hintText: "Remarks",
               ),
+              style: GoogleFonts.rubik()
             ),
             TextField(
             controller: statusController ,
@@ -68,6 +74,7 @@ class AddAppoinmentState extends State<AddAppointmentPage>{
               prefixIcon: Icon(Icons.question_mark_rounded),
               hintText: "Status",
               ),
+              style: GoogleFonts.rubik()
             ),
             DropdownMenu(
               inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
@@ -77,8 +84,9 @@ class AddAppoinmentState extends State<AddAppointmentPage>{
               controller: doctorNameController,
               dropdownMenuEntries: [
                 DropdownMenuEntry(value: 'Shastry', label: 'Shastry')
-              ],),
-            SizedBox(height: 40,),
+              ],
+              textStyle: GoogleFonts.rubik()),
+            SizedBox(height: 20,),
             ElevatedButton(onPressed: (){
               apptid = apptidController.text;
               patientid = patientidController.text;
