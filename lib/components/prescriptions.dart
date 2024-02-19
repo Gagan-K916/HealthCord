@@ -3,119 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:healthcord/constants/app_colors.dart';
 import 'package:healthcord/constants/measures.dart';
 import 'database.dart';
+import 'package:sqflite/sqflite.dart';
+import 'models/prescription.dart';
 
-void _showAddPrescription(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10)
-      ),
-      builder: (_) => Align(
-        alignment: Alignment.center,
-        child: AddPrescriptionPage()),
-    );
-  }
-
-class AddPrescriptionPage extends StatefulWidget {
-  const AddPrescriptionPage({super.key});
-
-  AddPrescriptionState createState() => AddPrescriptionState();
-}
-
-class AddPrescriptionState extends State<AddPrescriptionPage>{
-  final prescidController = TextEditingController();
-  final patientNameController = TextEditingController();
-  final apptidController = TextEditingController();
-  final medicationController = TextEditingController();
-  final dosageController = TextEditingController();
-  final frequencyController = TextEditingController();
-  final doctorNameController = TextEditingController();
-
-  String? apptid, prescid, patientName, medication, dosage, frequency, doctorName; 
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.maxFinite,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TextField(
-            controller: prescidController,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.numbers_rounded),
-              hintText: "Prescription ID",
-              ),
-          ),
-            DropdownMenu(
-              inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
-              leadingIcon: Icon(Icons.numbers_rounded),
-              hintText: "Appointment ID",
-              width: 640,
-              controller: apptidController,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: '1', label: '1'),
-                DropdownMenuEntry(value: '2', label: '2')
-              ],),
-            DropdownMenu(
-              inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
-              leadingIcon: Icon(Icons.person_2_rounded),
-              hintText: "Patient Name",
-              width: 640,
-              controller: patientNameController,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: 'Patient1', label: 'Patient1')
-              ],),
-            TextField(
-              controller: medicationController ,
-              decoration: InputDecoration(
-              prefixIcon: Icon(Icons.medical_information),
-              hintText: "Medication",
-              ),
-            ),
-            TextField(
-            controller: dosageController ,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.monitor_heart_outlined),
-              hintText: "Dosage",
-              ),
-            ),
-            TextField(
-            controller: frequencyController ,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.format_list_numbered_sharp),
-              hintText: "Frequency",
-              ),
-            ),
-            DropdownMenu(
-              inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
-              leadingIcon: Icon(Icons.person_2_rounded),
-              hintText: "Doctor Name",
-              width: 640,
-              controller: doctorNameController,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: 'Shastry', label: 'Shastry')
-              ],),
-            SizedBox(height: 20,),
-            ElevatedButton(onPressed: (){
-              apptid = prescidController.text;
-              patientName = patientNameController.text;
-              apptid = apptidController.text;
-              medication = medicationController.text;
-              dosage = dosageController.text;
-              doctorName = doctorNameController.text;
-            }, 
-            style:ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-                fixedSize: Size(200,50),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(circularRadius - 10)))),
-            child: Text("ADD", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),))
-        ],
-      )
-    );
-  }
-}
 
 class Prescriptions extends StatefulWidget{
 
@@ -128,6 +18,134 @@ class _PrescriptionsState extends State<Prescriptions>{
   final prescsearchController = TextEditingController();
 
   Future<List<DataRow>> _prescriptionsRowFuture = Future.value([]);
+
+  void _showAddPrescription(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10)
+      ),
+      builder: (_) => SizedBox(
+        height: 380,
+        child: Align(alignment: Alignment.center, child: AddPrescriptionPage())
+    ));
+  }
+
+  Widget AddPrescriptionPage(){
+  final patientNameController = TextEditingController();
+  final apptidController = TextEditingController();
+  final medicationController = TextEditingController();
+  final dosageController = TextEditingController();
+  final frequencyController = TextEditingController();
+  final doctorNameController = TextEditingController();
+
+  return SizedBox(
+    height: double.maxFinite,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+          DropdownMenu(
+            inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
+            leadingIcon: Icon(Icons.numbers_rounded),
+            hintText: "Appointment ID",
+            width: 640,
+            controller: apptidController,
+            dropdownMenuEntries: [
+              DropdownMenuEntry(value: '1', label: '1'),
+              DropdownMenuEntry(value: '2', label: '2')
+            ],),
+          DropdownMenu(
+            inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
+            leadingIcon: Icon(Icons.person_2_rounded),
+            hintText: "Patient Name",
+            width: 640,
+            controller: patientNameController,
+            dropdownMenuEntries: [
+              DropdownMenuEntry(value: 'Patient1', label: 'Patient1')
+            ],),
+            DropdownMenu(
+            inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
+            leadingIcon: Icon(Icons.person_2_rounded),
+            hintText: "Doctor Name",
+            width: 640,
+            controller: doctorNameController,
+            dropdownMenuEntries: [
+              DropdownMenuEntry(value: 'Shastry', label: 'Shastry')
+            ],),
+          TextField(
+            controller: medicationController ,
+            decoration: InputDecoration(
+            prefixIcon: Icon(Icons.medical_information),
+            hintText: "Medication",
+            ),
+          ),
+          TextField(
+          controller: dosageController ,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.monitor_heart_outlined),
+            hintText: "Dosage",
+            ),
+          ),
+          TextField(
+          controller: frequencyController ,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.format_list_numbered_sharp),
+            hintText: "Frequency",
+            ),
+          ),
+          SizedBox(height: 20,),
+          ElevatedButton(onPressed: ()async {
+            if (apptidController.text.isEmpty | patientNameController.text.isEmpty | doctorNameController.text.isEmpty | medicationController.text.isEmpty) {
+              fieldAlert();
+            } else {
+              Database db = await PatientDatabase.instance.database;
+              await insertPrescription(
+                  db,
+                  apptidController.text,
+                  patientNameController.text,
+                  doctorNameController.text,
+                  medicationController.text,
+                  dosageController.text,
+                  frequencyController.text);
+              setState(() {
+                _prescriptionsRowFuture = getPrescriptionRowData();
+              });
+              Navigator.pop(context);
+            }
+          }, 
+          style:ElevatedButton.styleFrom(
+            backgroundColor: primaryColor,
+              fixedSize: Size(200,50),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(circularRadius - 10)))),
+          child: Text("ADD", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),))
+      ],
+    )
+  );
+}
+
+void fieldAlert() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+          title: Text(
+            'WARNING!',
+            style: GoogleFonts.poppins(
+                color: Colors.red.shade600,
+                fontSize: 19,
+                fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+            'Please fill all the fields',
+            style: GoogleFonts.poppins(
+                color: primaryColor, fontSize: 15, fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(circularRadius))),
+    );
+  }
 
   @override
   void initState() {
