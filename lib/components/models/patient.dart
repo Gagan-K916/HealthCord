@@ -49,3 +49,7 @@ Future <List<Map<String, dynamic>>> getFilteredPatients(Database db, String sear
     '''
   );
 }
+
+Future <String> getPatientName(Database db, String patientID) async{
+  return "${(await db.rawQuery("SELECT First_Name FROM PATIENT WHERE Patient_ID = $patientID;"))[0]['First_Name']} ${(await db.rawQuery("SELECT Last_Name FROM PATIENT WHERE Patient_ID = $patientID;"))[0]['Last_Name']}";
+}

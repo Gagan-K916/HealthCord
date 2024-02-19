@@ -4,109 +4,6 @@ import 'package:healthcord/constants/app_colors.dart';
 import 'package:healthcord/constants/measures.dart';
 import 'database.dart';
 
-void _showAddAppointment(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10)
-      ),
-      builder: (_) => SizedBox(
-        height: 340,
-        child: Align(
-          alignment: Alignment.center,
-          child: AddAppointmentPage()),
-      ),
-    );
-  }
-
-class AddAppointmentPage extends StatefulWidget {
-  const AddAppointmentPage({super.key});
-
-  AddAppoinmentState createState() => AddAppoinmentState();
-}
-
-class AddAppoinmentState extends State<AddAppointmentPage>{
-  final apptidController = TextEditingController();
-  final patientidController = TextEditingController();
-  final patientNameController = TextEditingController();
-  final remarksController = TextEditingController();
-  final statusController = TextEditingController();
-  final doctoridController = TextEditingController();
-  final doctorNameController = TextEditingController();
-
-  String? apptid, patientid, patientName, remarks, status, doctorid, doctorName; 
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.maxFinite,
-      child: Column(
-        children: [
-          TextField(
-            controller: apptidController,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.numbers_rounded),
-              hintText: "Appointment ID",
-              ),
-              style: GoogleFonts.rubik()
-          ),
-            DropdownMenu(
-              inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
-              leadingIcon: Icon(Icons.person_2_rounded),
-              hintText: "Patient Name",
-              width: 640,
-              controller: patientNameController,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: 'Patient 1', label: 'Patient 1')
-              ],
-              textStyle: GoogleFonts.rubik()),
-            TextField(
-              controller: remarksController ,
-              decoration: InputDecoration(
-              prefixIcon: Icon(Icons.note_alt),
-              hintText: "Remarks",
-              ),
-              style: GoogleFonts.rubik()
-            ),
-            TextField(
-            controller: statusController ,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.question_mark_rounded),
-              hintText: "Status",
-              ),
-              style: GoogleFonts.rubik()
-            ),
-            DropdownMenu(
-              inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
-              leadingIcon: Icon(Icons.person_2_rounded),
-              hintText: "Doctor Name",
-              width: 640,
-              controller: doctorNameController,
-              dropdownMenuEntries: [
-                DropdownMenuEntry(value: 'Shastry', label: 'Shastry')
-              ],
-              textStyle: GoogleFonts.rubik()),
-            SizedBox(height: 20,),
-            ElevatedButton(onPressed: (){
-              apptid = apptidController.text;
-              patientid = patientidController.text;
-              patientName = patientNameController.text;
-              remarks = remarksController.text;
-              status = statusController.text;
-              doctorid = doctoridController.text;
-              doctorName = doctorNameController.text;
-            }, 
-            style:ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-                fixedSize: Size(200,50),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(circularRadius - 10)))),
-            child: Text("ADD", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),))
-        ],
-      )
-    );
-  }
-}
 
 class Appointments extends StatefulWidget{
 
@@ -136,11 +33,107 @@ class _AppointmentsState extends State<Appointments>{
         DataCell(Text(appointment[1].toString())),
         DataCell(Text(appointment[2].toString())),
         DataCell(Text(appointment[3].toString())),
-        DataCell(Text(appointment[4].toString()))
+        DataCell(Text(appointment[4].toString())),
+        DataCell(Text(appointment[5].toString()))
       ]));
     }
     return rows;
   }
+
+  void _showAddAppointment(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10)
+      ),
+      builder: (_) => SizedBox(
+        height: 340,
+        child: Align(
+          alignment: Alignment.center,
+          child: AddAppointmentPage()),
+      ),
+    );
+  }
+
+  Widget AddAppointmentPage(){
+  final apptDateController = TextEditingController();
+  final patientidController = TextEditingController();
+  final patientNameController = TextEditingController();
+  final remarksController = TextEditingController();
+  final statusController = TextEditingController();
+  final doctoridController = TextEditingController();
+  final doctorNameController = TextEditingController();
+
+  String? apptDate ,patientid, patientName, remarks, status, doctorid, doctorName; 
+
+  return SizedBox(
+    height: double.maxFinite,
+    child: Column(
+      children: [
+        TextField(
+          controller: apptDateController,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.calendar_month_outlined),
+            hintText: "Appointment Date",
+            ),
+            style: GoogleFonts.rubik()
+        ),
+          DropdownMenu(
+            inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
+            leadingIcon: Icon(Icons.person_2_rounded),
+            hintText: "Patient Name",
+            width: 640,
+            controller: patientNameController,
+            dropdownMenuEntries: [
+              DropdownMenuEntry(value: 'Patient 1', label: 'Patient 1')
+            ],
+            textStyle: GoogleFonts.rubik()),
+          TextField(
+            controller: remarksController ,
+            decoration: InputDecoration(
+            prefixIcon: Icon(Icons.note_alt),
+            hintText: "Remarks",
+            ),
+            style: GoogleFonts.rubik()
+          ),
+          TextField(
+          controller: statusController ,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.question_mark_rounded),
+            hintText: "Status",
+            ),
+            style: GoogleFonts.rubik()
+          ),
+          DropdownMenu(
+            inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
+            leadingIcon: Icon(Icons.person_2_rounded),
+            hintText: "Doctor Name",
+            width: 640,
+            controller: doctorNameController,
+            dropdownMenuEntries: [
+              DropdownMenuEntry(value: 'Shastry', label: 'Shastry')
+            ],
+            textStyle: GoogleFonts.rubik()),
+          SizedBox(height: 20,),
+          ElevatedButton(onPressed: (){
+            apptDate = apptDateController.text;
+            patientid = patientidController.text;
+            patientName = patientNameController.text;
+            remarks = remarksController.text;
+            status = statusController.text;
+            doctorid = doctoridController.text;
+            doctorName = doctorNameController.text;
+          }, 
+          style:ElevatedButton.styleFrom(
+            backgroundColor: primaryColor,
+              fixedSize: Size(200,50),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(circularRadius - 10)))),
+          child: Text("ADD", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),))
+      ],
+    )
+  );
+}
 
   @override
   Widget build(BuildContext context){
@@ -223,6 +216,7 @@ class _AppointmentsState extends State<Appointments>{
                   border: TableBorder.all(color: Colors.grey, borderRadius: BorderRadius.circular(circularRadius)),
                   columns: const [
                   DataColumn(label: Text('Appointment ID')),
+                  DataColumn(label: Text('Appointment Date')),
                   DataColumn(label: Text('Doctor ID')),
                   DataColumn(label: Text('Patient ID')),
                   DataColumn(label: Text('Remarks')),

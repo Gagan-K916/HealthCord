@@ -73,11 +73,11 @@ class PatientDatabase {
       rows.add(
         [
         appointment['Appointment_ID'],
+        appointment['Appointment_Date'],
         appointment['Doctor_ID'],
         appointment['Patient_ID'],
         appointment['Remarks'],
         appointment['Status'],
-        
       ]
       );
     }
