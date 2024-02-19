@@ -312,6 +312,7 @@ class PatientsState extends State<patients> {
         FutureBuilder(
             future: patientsRowFuture,
             builder: (context, snapshot) {
+              try{
               if (snapshot.connectionState == ConnectionState.done) {
                 return Container(
                   height: 542,
@@ -349,6 +350,8 @@ class PatientsState extends State<patients> {
                 return Container(
                     height: 542,
                     child: Center(child: CircularProgressIndicator()));
+              }}on TypeError{
+                return Container(child: Center(child: Text("No Results Found")),);
               }
             }),
       ],

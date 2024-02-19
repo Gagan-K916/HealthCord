@@ -17,3 +17,11 @@ Future<Database> initializeDoctors(Database db) async{
   );
   return db;
 }
+
+Future <String> getDoctorName(Database db, String doctorID) async{
+  return "${(await db.rawQuery("SELECT First_Name FROM DOCTOR WHERE Doctor_ID = $doctorID;"))[0]['First_Name']} ${(await db.rawQuery("SELECT Last_Name FROM DOCTOR WHERE Doctor_ID = $doctorID;"))[0]['Last_Name']}";
+}
+
+Future<String> getDoctorID(Database db, String doctorFullName) async {
+  return "${(await db.rawQuery("SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '%${doctorFullName[0]}%'  OR Last_Name LIKE '%${doctorFullName[1]}%'"))[0]['Doctor_ID']}";
+}

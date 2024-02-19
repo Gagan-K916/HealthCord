@@ -1,3 +1,5 @@
+import 'patient.dart';
+import 'doctor.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future<Database> initializeAppointments(Database db) async{
@@ -25,4 +27,40 @@ Future<Database> initializeAppointments(Database db) async{
     INSERT INTO APPOINTMENT(Appointment_Date, Doctor_ID, Patient_ID, Remarks, Status) VALUES ('2023-02-24', '1', '10', 'Cardiology follow-up', 'Scheduled');
   ''');
   return db;
+}
+
+Future<void> insertAppointment(Database db, String patientName, String apptDate, String doctorName, String remarks, String status) async{
+  List<String> patientFullName = patientName.split(" ");
+  List<String> doctorFullName = doctorName.split(" ");
+
+  String patientID = "${(await db.rawQuery("SELECT Patient_ID FROM PATIENT WHERE First_Name LIKE '%${patientFullName[0]}%'  AND Last_Name LIKE '%${patientFullName[1]}%'"))[0]['Patient_ID']}";
+  String doctorID = "${(await db.rawQuery("SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '%${doctorFullName[0]}%'  AND Last_Name LIKE '%${doctorFullName[1]}%'"))[0]['Doctor_ID']}";
+  await db.execute("INSERT INTO APPOINTMENT(Appointment_Date, Doctor_ID, Patient_ID, Remarks, Status) VALUES ('$apptDate', '$doctorID', '$patientID', '$remarks', '$status');");
+}
+
+Future <List<Map<String, dynamic>>> getFilteredAppointments(Database db, String filterType, String searchKey) async{
+  if(filterType == "Patient"){
+  return await db.rawQuery('''
+      SELECT * 
+      FROM APPOINTMENT
+      WHERE Patient_ID LIKE '%${await getPatientID(db, searchKey)}%';
+    '''
+  );
+  }
+  else if(filterType == "Doctor"){
+    return await db.rawQuery('''
+      SELECT *
+      FROM APPOINTMENT  
+      WHERE Doctor_ID LIKE '%${await getDoctorID(db, searchKey)}%';
+      ''');
+  }
+  else if(filterType == "Status"){
+    return await db.rawQuery('''
+      SELECT *
+      FROM APPOINTMENT  
+      WHERE Status LIKE '%$searchKey%';
+      ''');
+  }else{
+    return await db.rawQuery("SELECT * FROM APPOINTMENT");
+  }
 }
