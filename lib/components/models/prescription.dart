@@ -24,3 +24,36 @@ Future<Database> initializePrescription(Database db) async{
 Future<void> insertPrescription(Database db, String apptID, String patientName, String doctorName, String medication, String dosage, String frequency) async{
   await db.execute("INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES('${await getDoctorID(db, doctorName)}', '${await getPatientID(db, patientName)}', '$apptID', '$medication', '$dosage', '$frequency');");
 }
+
+Future <List<Map<String, dynamic>>> getFilteredPrescriptions(Database db, String searchKey) async{
+  return await db.rawQuery('''
+    SELECT * 
+    FROM  PRESCRIPTION
+    WHERE Doctor_ID = '${await getDoctorID(db, searchKey)}'
+
+    UNION
+
+    SELECT *
+    FROM PRESCRIPTION  
+    WHERE Patient_ID LIKE '${await getPatientID(db, searchKey)}'
+
+    UNION 
+
+    SELECT * 
+    FROM PRESCRIPTION
+    WHERE Medication LIKE '%$searchKey%'
+
+    UNION
+
+    SELECT *
+    FROM PRESCRIPTION
+    WHERE Frequency LIKE '%$searchKey%'
+
+    UNION
+    
+    SELECT *
+    FROM PRESCRIPTION
+    WHERE Dosage LIKE '%$searchKey%';
+    '''
+  );
+}

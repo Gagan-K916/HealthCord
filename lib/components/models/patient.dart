@@ -27,13 +27,13 @@ Future <List<Map<String, dynamic>>> getFilteredPatients(Database db, String sear
   return await db.rawQuery('''
     SELECT * 
     FROM PATIENT
-    WHERE First_Name LIKE '%$searchKey%'
+    WHERE First_Name LIKE '$searchKey%'
 
     UNION
 
     SELECT *
     FROM PATIENT  
-    WHERE Last_Name LIKE '%$searchKey%'
+    WHERE Last_Name LIKE '$searchKey%'
 
     UNION 
 
@@ -55,5 +55,10 @@ Future <String> getPatientName(Database db, String patientID) async{
 }
 
 Future<String> getPatientID(Database db, String patientFullName) async {
-  return "${(await db.rawQuery("SELECT Patient_ID FROM PATIENT WHERE First_Name LIKE '%${patientFullName[0]}%'  OR Last_Name LIKE '%${patientFullName[1]}%'"))[0]['Patient_ID']}";
+  return "${(await db.rawQuery("SELECT Patient_ID FROM PATIENT WHERE First_Name LIKE '${patientFullName[0]}%'  OR Last_Name LIKE '${patientFullName[1]}%'"))[0]['Patient_ID']}";
+}
+
+Future<String> getTotalNoOfPatients(Database db) async{
+  print("${await db.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT;")}");
+  return "${await db.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT;")}";
 }

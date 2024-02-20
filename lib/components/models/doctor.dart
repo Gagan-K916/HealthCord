@@ -23,5 +23,5 @@ Future <String> getDoctorName(Database db, String doctorID) async{
 }
 
 Future<String> getDoctorID(Database db, String doctorFullName) async {
-  return "${(await db.rawQuery("SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '%${doctorFullName[0]}%'  OR Last_Name LIKE '%${doctorFullName[1]}%'"))[0]['Doctor_ID']}";
+  return "${(await db.rawQuery("SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '${doctorFullName[0]}%'  OR Last_Name LIKE '${doctorFullName[1]}%'"))[0]['Doctor_ID']}";
 }

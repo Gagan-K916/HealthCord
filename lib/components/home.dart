@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:healthcord/components/patients.dart';
 import '../constants/app_colors.dart';
@@ -6,6 +7,7 @@ import '../constants/measures.dart';
 import 'dashboard.dart';
 import 'appointments.dart';
 import 'prescriptions.dart';
+import 'dart:io';
 
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,6 +17,8 @@ class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
+
+
 
 class _HomeState extends State<Home> {
   int _selectedIndex = 1;
@@ -27,7 +31,6 @@ class _HomeState extends State<Home> {
     'Patients',
     'Appointments',
     'Prescriptions',
-    '',
     ''
   ];
 
@@ -39,6 +42,38 @@ class _HomeState extends State<Home> {
           fontWeight: FontWeight.w500,
         ));
   }
+
+  Future<bool> _shouldExitApp(BuildContext context) async {
+  bool shouldExit = false;
+  
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text("Confirm Exit"),
+        content: Text("Are you sure you want to exit?"),
+        actions: [
+           TextButton(
+             onPressed: () async {
+              Navigator.of(context).pop();
+             },
+             child: Text("No"),
+           ),
+           TextButton(
+             onPressed: () {
+               shouldExit = true;
+               exit(0);  
+             },
+             child: Text("Yes"),
+           ),
+         ],
+       );
+     }
+   );
+
+  return shouldExit; 
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,15 +125,17 @@ class _HomeState extends State<Home> {
                       label: textFormatter('Prescriptions'),
                       padding: const EdgeInsets.all(defaultPadding)),
                   NavigationRailDestination(
-                      icon: const Icon(Icons.settings_rounded),
-                      label: textFormatter('Settings'),
-                      padding: const EdgeInsets.all(defaultPadding)),
-                  NavigationRailDestination(
                       icon: const Icon(Icons.logout_rounded),
                       label: textFormatter('Logout'),
                       padding: const EdgeInsets.all(defaultPadding))
                 ],
-                onDestinationSelected: (int value) {
+                onDestinationSelected: (int value) async {
+                  if(value == 5){
+                    bool shouldExit = await _shouldExitApp(context);
+                    if (shouldExit) {      
+                      exit(0);
+                               }
+                  }
                   setState(() {
                     _selectedIndex = value;
                   });
@@ -155,7 +192,8 @@ class _HomeState extends State<Home> {
                         dashboard(username),
                         patients(),
                         Appointments(),
-                        Prescriptions()
+                        Prescriptions(),
+                        Container()
                       ],
                     )
                   ])))

@@ -5,6 +5,8 @@ import 'package:healthcord/constants/measures.dart';
 import 'database.dart';
 import 'package:sqflite/sqflite.dart';
 import 'models/prescription.dart';
+import 'models/doctor.dart';
+import 'models/patient.dart';
 
 
 class Prescriptions extends StatefulWidget{
@@ -97,7 +99,7 @@ class _PrescriptionsState extends State<Prescriptions>{
           ElevatedButton(onPressed: ()async {
             if (apptidController.text.isEmpty | patientNameController.text.isEmpty | doctorNameController.text.isEmpty | medicationController.text.isEmpty) {
               fieldAlert();
-            } else {
+            } else{
               Database db = await PatientDatabase.instance.database;
               await insertPrescription(
                   db,
@@ -123,6 +125,48 @@ class _PrescriptionsState extends State<Prescriptions>{
     )
   );
 }
+
+Future<List<DataRow>> getFilteredPrescriptionRows(String searchKey) async {
+    List<Map<String, dynamic>> results = await getFilteredPrescriptions(await PatientDatabase.instance.database, searchKey);
+    List<dynamic> rows = [];
+    List<DataRow> dataRows = [];
+    for (Map<String, dynamic> prescription in results) {
+      rows.add([
+        prescription['Prescription_ID'],
+        prescription['Doctor_ID'],
+        prescription['Patient_ID'],
+        prescription['Appointment_ID'],
+        prescription['Medication'],
+        prescription['Dosage'],
+        prescription['Frequency']
+      ]);
+    }
+    for (List<dynamic> prescription in rows) {
+      dataRows.add(DataRow(cells: [
+        DataCell(Center(
+            child: Text(
+          prescription[0].toString(),
+          style: GoogleFonts.oswald(
+              color: primaryColor, fontWeight: FontWeight.w600),
+        ))),
+        DataCell(Text(await getDoctorName(
+            await PatientDatabase.instance.database,
+            prescription[1].toString()))),
+        DataCell(Text(await getPatientName(await PatientDatabase.instance.database,
+              prescription[2].toString()))),
+        DataCell(Center(
+            child: Text(
+          prescription[3].toString(),
+          style: GoogleFonts.oswald(
+              color: primaryColor, fontWeight: FontWeight.w600),
+        ))),
+        DataCell(Center(child: Text(prescription[4].toString()))),
+        DataCell(Center(child: Text(prescription[5].toString()))),
+        DataCell(Center(child: Text(prescription[6].toString()))),
+      ]));
+    }
+    return dataRows;
+  }
 
 void fieldAlert() {
     showDialog(
@@ -158,10 +202,23 @@ void fieldAlert() {
     List<DataRow> rows = [];
     for(List<dynamic> prescription in prescriptions){
       rows.add(DataRow(cells: [
-        DataCell(Text(prescription[0].toString())),
-        DataCell(Text(prescription[1].toString())),
-        DataCell(Text(prescription[2].toString())),
-        DataCell(Text(prescription[3].toString())),
+        DataCell(Center(
+            child: Text(
+          prescription[0].toString(),
+          style: GoogleFonts.oswald(
+              color: primaryColor, fontWeight: FontWeight.w600),
+        ))),
+        DataCell(Text(await getDoctorName(
+            await PatientDatabase.instance.database,
+            prescription[1].toString()))),
+        DataCell(Text(await getPatientName(await PatientDatabase.instance.database,
+              prescription[2].toString()))),
+        DataCell(Center(
+            child: Text(
+          prescription[3].toString(),
+          style: GoogleFonts.oswald(
+              color: primaryColor, fontWeight: FontWeight.w600),
+        ))),
         DataCell(Text(prescription[4].toString())),
         DataCell(Text(prescription[5].toString())),
         DataCell(Text(prescription[6].toString()))
@@ -205,13 +262,25 @@ void fieldAlert() {
         ),
         borderRadius: BorderRadius.circular(15))),
         controller: prescsearchController,
-        onChanged: (value) {}// The table filtering widget,
+        onChanged: (value) {
+                      if (value != "") {
+                        setState(() {
+                          _prescriptionsRowFuture =
+                              getFilteredPrescriptionRows(value);
+                        });
+                      } else {
+                        setState(() {
+                          _prescriptionsRowFuture = getPrescriptionRowData();
+                        });
+                      }
+                    } 
       ),
     )
     , 
     FutureBuilder(
       future: _prescriptionsRowFuture, 
       builder: (context, snapshot){
+        try{
         if (snapshot.connectionState == ConnectionState.done){
           return Container(
             height: 542,
@@ -230,8 +299,8 @@ void fieldAlert() {
                   border: TableBorder.all(color: Colors.grey, borderRadius: BorderRadius.circular(circularRadius)),
                   columns: const [
                   DataColumn(label: Text('Prescription ID')),
-                  DataColumn(label: Text('Doctor ID')),
-                  DataColumn(label: Text('Patient ID')),
+                  DataColumn(label: Text('Doctor')),
+                  DataColumn(label: Text('Patient')),
                   DataColumn(label: Text('Appointment ID')),
                   DataColumn(label: Text('Medication')),
                   DataColumn(label: Text('Dosage')),
@@ -243,6 +312,9 @@ void fieldAlert() {
           );
         }else{
           return Container(height: 542,child: Center(child: CircularProgressIndicator()));
+        }
+        }on TypeError{
+          return Container(child: Text('No Results Found'),);
         }
       })],
     

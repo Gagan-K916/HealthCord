@@ -17,6 +17,14 @@ class PatientDatabase {
 
   static final PatientDatabase instance = PatientDatabase._init();
   static Database? _database;
+  static String totalNoOfPatients = '';
+  static String noOfMalePatients = '';
+  static String noOfFemalePatients = '';
+  static String totalAppointments= '';
+  static String totalPrescriptions = '';
+  static String pendingAppointments = '';
+  static String completedAppointments = '';
+  static String cancelledAppointments = '';
 
   Future<Database> get database async {
     if(_database != null){
@@ -25,8 +33,19 @@ class PatientDatabase {
     if (tableCount == 0) {
       _database = await _initDB('assets/healthCord.db');
     }
-    return _database!;
     
+    totalNoOfPatients = "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT;"))[0]['COUNT(Patient_ID)']}";
+    noOfMalePatients = "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT WHERE Gender = 'Male';"))[0]['COUNT(Patient_ID)']}";
+    noOfFemalePatients = "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT WHERE Gender = 'Female';"))[0]['COUNT(Patient_ID)']}";
+    
+    totalAppointments = "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT;"))[0]['COUNT(Appointment_ID)']}";
+    totalPrescriptions = "${(await _database!.rawQuery("SELECT COUNT(Presc_ID) FROM PRESCRIPTION;"))[0]['COUNT(Presc_ID)']}";
+
+    completedAppointments = "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Completed';"))[0]['COUNT(Appointment_ID)']}";
+    cancelledAppointments = "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Cancelled';"))[0]['COUNT(Appointment_ID)']}";
+    pendingAppointments = "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Scheduled';"))[0]['COUNT(Appointment_ID)']}";
+
+    return _database!;
   }
 
   Future<Database> _initDB(String filePath) async {
