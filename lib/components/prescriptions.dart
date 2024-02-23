@@ -18,6 +18,7 @@ class Prescriptions extends StatefulWidget{
 
 class _PrescriptionsState extends State<Prescriptions>{
   final prescsearchController = TextEditingController();
+  final presFilterController = TextEditingController();
 
   Future<List<DataRow>> _prescriptionsRowFuture = Future.value([]);
 
@@ -126,13 +127,14 @@ class _PrescriptionsState extends State<Prescriptions>{
   );
 }
 
-Future<List<DataRow>> getFilteredPrescriptionRows(String searchKey) async {
-    List<Map<String, dynamic>> results = await getFilteredPrescriptions(await PatientDatabase.instance.database, searchKey);
+Future<List<DataRow>> getFilteredPrescriptionRows(String filterType, String searchKey) async {
+    List<Map<String, dynamic>> results = await getFilteredPrescriptions(await PatientDatabase.instance.database, filterType, searchKey);
+    print(results);
     List<dynamic> rows = [];
     List<DataRow> dataRows = [];
     for (Map<String, dynamic> prescription in results) {
       rows.add([
-        prescription['Prescription_ID'],
+        prescription['Presc_ID'],
         prescription['Doctor_ID'],
         prescription['Patient_ID'],
         prescription['Appointment_ID'],
@@ -250,33 +252,65 @@ void fieldAlert() {
             ),), const SizedBox(width: defaultPadding,)]),
     Padding(
       padding: const EdgeInsets.all(defaultPadding),
-      child: TextField(
-        decoration: InputDecoration(hintText: "Search Prescriptions",prefixIcon: Icon(Icons.search_rounded, color: primaryColor,)
-        ,enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.grey),
-        borderRadius: BorderRadius.circular(10)),
-        focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(
-          color: Colors.black,
-          width: 2,
-        ),
-        borderRadius: BorderRadius.circular(15))),
-        controller: prescsearchController,
-        onChanged: (value) {
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Flexible(
+                flex: 5,
+                fit: FlexFit.loose,
+                child: TextField(
+                    decoration: InputDecoration(
+                        hintText: "Search Prescriptions",
+                        prefixIcon: Icon(
+                          Icons.search_rounded,
+                          color: primaryColor,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(15))),
+                    controller: prescsearchController,
+                    onChanged: (value) {
                       if (value != "") {
                         setState(() {
                           _prescriptionsRowFuture =
-                              getFilteredPrescriptionRows(value);
+                              getFilteredPrescriptionRows(presFilterController.text, value);
                         });
                       } else {
                         setState(() {
                           _prescriptionsRowFuture = getPrescriptionRowData();
                         });
                       }
-                    } 
-      ),
-    )
-    , 
+                    } // The table filtering widget,
+                    ),
+              ),
+              const SizedBox(
+                width: defaultPadding + 5,
+              ),
+              Text(
+                "Filter By",
+                style: GoogleFonts.robotoCondensed(
+                    color: primaryColor,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16),
+              ),
+              SizedBox(width: defaultPadding),
+              Flexible(
+                fit: FlexFit.loose,
+                flex: 2,
+                child: DropdownMenu(
+                    controller: presFilterController,
+                    dropdownMenuEntries: [
+                      DropdownMenuEntry(
+                          value: 'Patient', label: 'Patient'),
+                      DropdownMenuEntry(value: 'Doctor', label: 'Doctor'),
+                      DropdownMenuEntry(value: 'Medication', label: 'Medication'),
+                    ]),
+              )
+            ])),
     FutureBuilder(
       future: _prescriptionsRowFuture, 
       builder: (context, snapshot){

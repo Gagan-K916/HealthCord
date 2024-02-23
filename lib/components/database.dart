@@ -122,4 +122,25 @@ class PatientDatabase {
     }
     return rows;
   }
+
+  Future<List<dynamic>> getDoctors() async {
+    final Database db = await database;
+    List<Map<String, dynamic>> results = await db.rawQuery("SELECT * FROM DOCTOR");
+    List<dynamic> rows = [];
+    for (Map<String, dynamic> patient in results){
+      print(patient);
+      rows.add(
+        [
+        patient['Doctor_ID'],
+        patient['First_Name'],
+        patient['Last_Name'],
+        patient['Email'],
+        patient['Phone'],
+        patient['Gender'],
+        patient['Specialization']
+      ]
+      );
+    }
+    return rows;
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:healthcord/components/doctors.dart';
 import 'package:healthcord/components/patients.dart';
 import '../constants/app_colors.dart';
 import '../constants/measures.dart';
@@ -31,6 +32,7 @@ class _HomeState extends State<Home> {
     'Patients',
     'Appointments',
     'Prescriptions',
+    'Doctors',
     ''
   ];
 
@@ -55,7 +57,10 @@ class _HomeState extends State<Home> {
         actions: [
            TextButton(
              onPressed: () async {
-              Navigator.of(context).pop();
+              Navigator.pop(context);
+              setState(() {
+                _selectedIndex = 1;
+              });
              },
              child: Text("No"),
            ),
@@ -113,7 +118,7 @@ class _HomeState extends State<Home> {
                           right: defaultPadding,
                           bottom: defaultPadding)),
                   NavigationRailDestination(
-                      icon: const Icon(Icons.person_2_rounded),
+                      icon: const Icon(Icons.bed),
                       label: textFormatter('Patients'),
                       padding: const EdgeInsets.all(defaultPadding)),
                   NavigationRailDestination(
@@ -125,12 +130,17 @@ class _HomeState extends State<Home> {
                       label: textFormatter('Prescriptions'),
                       padding: const EdgeInsets.all(defaultPadding)),
                   NavigationRailDestination(
+                      icon: const Icon(Icons.person_2_rounded),
+                      label: textFormatter('Doctors'),
+                      padding: const EdgeInsets.all(defaultPadding)),
+                  NavigationRailDestination(
                       icon: const Icon(Icons.logout_rounded),
                       label: textFormatter('Logout'),
-                      padding: const EdgeInsets.all(defaultPadding))
+                      padding: const EdgeInsets.all(defaultPadding)),
+                  
                 ],
                 onDestinationSelected: (int value) async {
-                  if(value == 5){
+                  if(value == 6){
                     bool shouldExit = await _shouldExitApp(context);
                     if (shouldExit) {      
                       exit(0);
@@ -193,6 +203,7 @@ class _HomeState extends State<Home> {
                         patients(),
                         Appointments(),
                         Prescriptions(),
+                        Doctors(),
                         Container()
                       ],
                     )

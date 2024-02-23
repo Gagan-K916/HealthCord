@@ -16,7 +16,18 @@ Future<Database> initializePrescription(Database db) async{
   ''');
 
   await db.execute(
-    "INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 1, 1, 'Aspirin', '10mg', 'Once daily'), (2, 2, 2, 'Ibuprofen', '200mg', 'Twice daily'), (1, 3, 3, 'Metoprolol', '50mg', 'Once daily'), (4, 4, 4, 'Cetirizine', '10mg', 'Once daily'), (5, 5, 5, 'Gabapentin', '300mg', 'Three times daily'), (2, 6, 6, 'Ibuprofen', '200mg', 'Once daily'), (3, 7, 7, 'Aspirin', '10mg', 'Once daily'), (4, 8, 8, 'Hydrocortisone', '1%', 'Apply as needed'), (5, 9, 9, 'Topiramate', '50mg', 'Once daily'), (1, 10, 10, 'Aspirin', '10mg', 'Once daily');"
+    '''
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 1, 1, 'Aspirin', '10mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 2, 2, 'Ibuprofen', '200mg', 'Twice daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 3, 3, 'Metoprolol', '50mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 4, 4, 'Cetirizine', '10mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 5, 5, 'Gabapentin', '300mg', 'Three timesdaily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 6, 6, 'Ibuprofen', '200mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 7, 7, 'Aspirin', '10mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 8, 8, 'Hydrocortisone', '1%', 'Apply a needed');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 9, 9, 'Topiramate', '50mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 10, 10, 'Aspirin', '10mg', 'Once daily');
+'''
   );
   return db;
 }
@@ -25,35 +36,29 @@ Future<void> insertPrescription(Database db, String apptID, String patientName, 
   await db.execute("INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES('${await getDoctorID(db, doctorName)}', '${await getPatientID(db, patientName)}', '$apptID', '$medication', '$dosage', '$frequency');");
 }
 
-Future <List<Map<String, dynamic>>> getFilteredPrescriptions(Database db, String searchKey) async{
+Future <List<Map<String, dynamic>>> getFilteredPrescriptions(Database db, String filterType, String searchKey) async{
+  if(filterType == "Patient"){
   return await db.rawQuery('''
-    SELECT * 
-    FROM  PRESCRIPTION
-    WHERE Doctor_ID = '${await getDoctorID(db, searchKey)}'
-
-    UNION
-
-    SELECT *
-    FROM PRESCRIPTION  
-    WHERE Patient_ID LIKE '${await getPatientID(db, searchKey)}'
-
-    UNION 
-
-    SELECT * 
-    FROM PRESCRIPTION
-    WHERE Medication LIKE '%$searchKey%'
-
-    UNION
-
-    SELECT *
-    FROM PRESCRIPTION
-    WHERE Frequency LIKE '%$searchKey%'
-
-    UNION
-    
-    SELECT *
-    FROM PRESCRIPTION
-    WHERE Dosage LIKE '%$searchKey%';
+      SELECT * 
+      FROM PRESCRIPTION
+      WHERE Patient_ID LIKE '%${await getPatientID(db, searchKey)}%';
     '''
   );
+  }
+  else if(filterType == "Doctor"){
+    return await db.rawQuery('''
+      SELECT *
+      FROM PRESCRIPTION  
+      WHERE Doctor_ID LIKE '%${await getDoctorID(db, searchKey)}%';
+      ''');
+  }
+  else if(filterType == "Medication"){
+    return await db.rawQuery('''
+      SELECT *
+      FROM PRESCRIPTION  
+      WHERE Medication LIKE '%$searchKey%';
+      ''');
+  }else{
+    return await db.rawQuery("SELECT * FROM PRESCRIPTION");
+  }
 }
