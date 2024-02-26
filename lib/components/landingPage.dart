@@ -299,9 +299,47 @@ class LandingPageState extends State<LandingPage>{
                   ],
                 ),
               SizedBox(width: defaultPadding * 3)
-
               ],),
-            )
+            ),
+            Container(child: 
+            Row(children: [
+              Spacer(),
+              Column(
+                children: [
+                  Text("Help your patients stay healthy",
+                        style: GoogleFonts.poppins(
+                                        color: primaryColor,
+                                        fontSize: defaultFontSize + 20,
+                                        fontWeight: FontWeight.w400,
+                                      )),
+                  Image.asset('assets/images/caring points.png', height: 200)
+                ],
+              ),
+              Spacer(),
+              Image.asset('assets/images/caring.png', height: 600),
+              Spacer()
+            ],),),
+                SizedBox(height: 50,),
+            Container(decoration: BoxDecoration(color: primaryColor, borderRadius: BorderRadius.circular(circularRadius),),
+            child: 
+              Row(children: [
+                Spacer(),
+                Column(children:[
+                  SizedBox(height: 50,),
+                  Text("We Care, We Connect, We Empower - Your Journey to Vitality.",
+                        style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: defaultFontSize + 20,
+                                        fontWeight: FontWeight.w400,
+                                      )),
+                  SizedBox(height: 50,),
+                  Image.asset('assets/images/reviews.png', height: 400),
+                  SizedBox(height: 50,),
+                ]),
+                Spacer()
+                
+              ]),),
+              Image.asset('assets/images/footer.png')
           ],
         ),
       )

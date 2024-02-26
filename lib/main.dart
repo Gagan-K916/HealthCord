@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthcord/components/database.dart';
 import 'package:healthcord/components/landingPage.dart';
+import 'package:healthcord/components/login.dart';
 import 'components/home.dart';
 
 
@@ -20,7 +21,7 @@ class HealthCord extends StatelessWidget{
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: ThemeData(useMaterial3: true),
-      home: const LandingPage(),
+      home: const LoginPage(),
     );
   }
 }
