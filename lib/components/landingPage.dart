@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:healthcord/constants/app_colors.dart';
 import 'package:healthcord/constants/measures.dart';
+import 'login.dart';
+import 'register.dart';
 
 class LandingPage extends StatefulWidget{
   const LandingPage({super.key});
@@ -50,7 +52,9 @@ class LandingPageState extends State<LandingPage>{
                           ),
                           SizedBox(width: defaultPadding*2,),
                           TextButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
+                            },
                             child: Text("Login",
                               style: GoogleFonts.ptSans(
                                 color: Colors.white,
@@ -61,7 +65,9 @@ class LandingPageState extends State<LandingPage>{
                           SizedBox(width: defaultPadding*2,),
                           TextButton(
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.white)),
-                            onPressed: (){},
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterPage()));
+                            },
                             child: Text("Register",
                               style: GoogleFonts.ptSans(
                                 color: primaryColor,
@@ -107,7 +113,9 @@ class LandingPageState extends State<LandingPage>{
                             TextButton(
                               style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => secondaryColor),
                               fixedSize: MaterialStateProperty.resolveWith((states) => Size(140,50 ))),
-                              onPressed: (){},
+                              onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> RegisterPage()));
+                              },
                               child:  Text("Register",
                               style: GoogleFonts.ptSans(
                                 color: primaryColor,
@@ -122,7 +130,9 @@ class LandingPageState extends State<LandingPage>{
                               shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(
                        side: BorderSide(color: Colors.white, width: 2.0), borderRadius: BorderRadius.circular(circularRadius + 5)
                      ))),
-                              onPressed: (){},
+                              onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                              },
                               child:  Text("Login",
                               style: GoogleFonts.ptSans(
                                 color: Colors.white,
@@ -288,7 +298,9 @@ class LandingPageState extends State<LandingPage>{
                     SizedBox(height: 30,),
                     TextButton(
                       style: ButtonStyle(fixedSize: MaterialStateProperty.resolveWith((states) => Size(350,50) ), backgroundColor: MaterialStateProperty.resolveWith((states) => primaryColor)),
-                            onPressed: (){},
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
+                            },
                             child: Text("Login",
                               style: GoogleFonts.ptSans(
                                 color: Colors.white,

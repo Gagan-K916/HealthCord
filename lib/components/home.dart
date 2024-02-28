@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:healthcord/components/doctors.dart';
+import 'package:healthcord/components/landingPage.dart';
 import 'package:healthcord/components/patients.dart';
 import '../constants/app_colors.dart';
 import '../constants/measures.dart';
@@ -13,18 +14,18 @@ import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  String username = '';
+  Home({super.key, required this.username});
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
 
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   int _selectedIndex = 1;
   bool _extended = true;
-  String username = "Shastry";
 
   List<String> destinations = [
     '',
@@ -57,17 +58,14 @@ class _HomeState extends State<Home> {
         actions: [
            TextButton(
              onPressed: () async {
-              Navigator.pop(context);
-              setState(() {
-                _selectedIndex = 1;
-              });
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Home(username: widget.username)));
              },
              child: Text("No"),
            ),
            TextButton(
              onPressed: () {
                shouldExit = true;
-               exit(0);  
+               Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPage()));  
              },
              child: Text("Yes"),
            ),
@@ -143,8 +141,8 @@ class _HomeState extends State<Home> {
                   if(value == 6){
                     bool shouldExit = await _shouldExitApp(context);
                     if (shouldExit) {      
-                      exit(0);
-                               }
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPage()));
+                      }
                   }
                   setState(() {
                     _selectedIndex = value;
@@ -199,7 +197,7 @@ class _HomeState extends State<Home> {
                       index: _selectedIndex,
                       children: [
                         Container(),
-                        dashboard(username),
+                        dashboard(widget.username),
                         patients(),
                         Appointments(),
                         Prescriptions(),

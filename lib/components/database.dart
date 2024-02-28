@@ -128,7 +128,6 @@ class PatientDatabase {
     List<Map<String, dynamic>> results = await db.rawQuery("SELECT * FROM DOCTOR");
     List<dynamic> rows = [];
     for (Map<String, dynamic> patient in results){
-      print(patient);
       rows.add(
         [
         patient['Doctor_ID'],

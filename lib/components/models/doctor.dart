@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
+
 Future<Database> initializeDoctors(Database db) async{
   await db.execute('''
   CREATE TABLE IF NOT EXISTS DOCTOR(
@@ -9,17 +10,18 @@ Future<Database> initializeDoctors(Database db) async{
     Email TEXT,
     Phone TEXT,
     Gender TEXT,
-    Specialization TEXT
+    Specialization TEXT,
+    Password TEXT
   );
   ''');
 
   await db.execute(
   '''
-  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization)  VALUES ('Ashwin', 'Vinod', 'ashwinv@example.co', '9999911111', 'Male','Cardiology');
-  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization) VALUES ('Mohammed', 'Shanshad', 'mshanshad@example.com', '9999922222', 'Male','Orthopedics');
-  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization)  VALUES ('Snehith', 'Shastry', 'shastry@example.com', '9999933333', 'Male','Cardiology');
-  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization) VALUES ('Gagan', 'Deep', 'gagandeep@example.com', '9999944444','Male', 'Dermatologist');
-  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization) VALUES ('Chethan', 'P', 'chethanpp@example.com', '9999955555', 'Male','Neurology');
+  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization, Password)  VALUES ('Ashwin', 'Vinod', 'ashwinv@example.co', '9999911111', 'Male','Cardiology', 'password');
+  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization, Password) VALUES ('Mohammed', 'Shanshad', 'mshanshad@example.com', '9999922222', 'Male','Orthopedics', 'password');
+  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization, Password)  VALUES ('Snehith', 'Shastry', 'shastry@example.com', '9999933333', 'Male','Cardiology', 'password');
+  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization, Password) VALUES ('Gagan', 'Deep', 'gagandeep@example.com', '9999944444','Male', 'Dermatologist', 'password');
+  INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization, Password) VALUES ('Chethan', 'P', 'chethanpp@example.com', '9999955555', 'Male','Neurology', 'password');
 '''
   );
   return db;
@@ -68,4 +70,17 @@ Future <List<Map<String, dynamic>>> getFilteredDoctors(Database db, String searc
     WHERE Specialization LIKE '%$searchKey%';
     '''
   );
+}
+
+Future <bool> isDoctor(Database db,String username, String password) async{
+  return (await db.rawQuery("SELECT First_Name FROM DOCTOR WHERE Email = '$username'")).isNotEmpty;
+}
+
+Future<String> getDoctorFirstName(Database db, String username) async{
+  final results = await (db.rawQuery("SELECT First_Name FROM DOCTOR WHERE Email = '$username'"));
+  return (results[0]['First_Name']).toString();
+}
+
+Future <void> registerDoctor(Database db, String? firstName, lastName, gender, email, phone, specialization, password) async{
+  await db.execute("INSERT INTO DOCTOR (First_Name, Last_Name, Email, Phone, Gender, Specialization, Password) VALUES ('$firstName', '$lastName', '$email', '$phone', '$gender', '$specialization', '$password');");
 }

@@ -21,7 +21,7 @@ class HealthCord extends StatelessWidget{
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: ThemeData(useMaterial3: true),
-      home: const LoginPage(),
+      home: const LandingPage(),
     );
   }
 }

@@ -253,33 +253,33 @@ class DoctorsState extends State<Doctors> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-          ElevatedButton.icon(
-            onPressed: () {
-              _showAddDoctor(context);
-            },
-            icon: Icon(
-              Icons.person_add,
-              color: primaryColor,
-              size: 30,
-            ),
-            label: Text("Add Doctor",
-                style: GoogleFonts.poppins(
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16)),
-            style: ElevatedButton.styleFrom(
-              fixedSize: Size(200, 50),
-              backgroundColor: Colors.grey.shade100,
-              shape: const RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.all(Radius.circular(circularRadius - 10))),
-            ),
-          ),
-          const SizedBox(
-            width: defaultPadding,
-          )
-        ]),
+        // Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        //   ElevatedButton.icon(
+        //     onPressed: () {
+        //       _showAddDoctor(context);
+        //     },
+        //     icon: Icon(
+        //       Icons.person_add,
+        //       color: primaryColor,
+        //       size: 30,
+        //     ),
+        //     label: Text("Add Doctor",
+        //         style: GoogleFonts.poppins(
+        //             color: primaryColor,
+        //             fontWeight: FontWeight.w500,
+        //             fontSize: 16)),
+        //     style: ElevatedButton.styleFrom(
+        //       fixedSize: Size(200, 50),
+        //       backgroundColor: Colors.grey.shade100,
+        //       shape: const RoundedRectangleBorder(
+        //           borderRadius:
+        //               BorderRadius.all(Radius.circular(circularRadius - 10))),
+        //     ),
+        //   ),
+        //   const SizedBox(
+        //     width: defaultPadding,
+        //   )
+        // ]),
         Padding(
           padding: const EdgeInsets.all(defaultPadding),
           child: TextField(
