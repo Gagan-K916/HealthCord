@@ -9,7 +9,8 @@ import 'models/appointment.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Appointments extends StatefulWidget {
-  const Appointments({super.key});
+  final String username;
+  const Appointments({super.key, required this.username});
 
   _AppointmentsState createState() => _AppointmentsState();
 }
@@ -31,8 +32,8 @@ class _AppointmentsState extends State<Appointments> {
   }
 
   Future<List<DataRow>> getAppointmentRowData() async {
-    List<dynamic> appointments =
-        await PatientDatabase.instance.getAppointments();
+    List<dynamic> appointments = await PatientDatabase.instance.getAppointments(widget.username);
+    print(appointments);
     List<DataRow> rows = [];
     for (List<dynamic> appointment in appointments) {
       rows.add(DataRow(cells: [
@@ -378,7 +379,7 @@ class _AppointmentsState extends State<Appointments> {
             future: _appointmentsRowFuture,
             builder: (context, snapshot) {
               try{
-              if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
                 return Container(
                   height: 542,
                   child: ClipRRect(

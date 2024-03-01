@@ -10,7 +10,6 @@ import 'dashboard.dart';
 import 'appointments.dart';
 import 'prescriptions.dart';
 import 'dart:io';
-
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
@@ -197,10 +196,10 @@ class HomeState extends State<Home> {
                       index: _selectedIndex,
                       children: [
                         Container(),
-                        dashboard(widget.username),
-                        patients(),
-                        Appointments(),
-                        Prescriptions(),
+                        dashboard(username: widget.username,),
+                        patients(username: widget.username,),
+                        Appointments(username: widget.username,),
+                        Prescriptions(username: widget.username,),
                         Doctors(),
                         Container()
                       ],

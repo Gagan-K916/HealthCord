@@ -32,7 +32,14 @@ class Greeting extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Hi, Dr. $username',
+              username == "Admin"? Text('Hi Administrator',
+              textAlign: TextAlign.left,
+                style: GoogleFonts.robotoCondensed(
+                  color: Colors.white,
+                  fontSize: defaultFontSize * 1.75,
+                  fontWeight: FontWeight.w600,
+                )):
+                Text('Hi Dr. $username',
                 textAlign: TextAlign.left,
                 style: GoogleFonts.robotoCondensed(
                   color: Colors.white,

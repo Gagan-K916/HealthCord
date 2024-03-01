@@ -10,8 +10,9 @@ import 'models/patient.dart';
 
 
 class Prescriptions extends StatefulWidget{
+  final String username;
 
-  const Prescriptions({super.key});
+  const Prescriptions({super.key, required this.username});
 
   _PrescriptionsState createState()=> _PrescriptionsState();
 }
@@ -200,7 +201,7 @@ void fieldAlert() {
   }
 
   Future<List<DataRow>> getPrescriptionRowData() async{
-    List<dynamic> prescriptions = await PatientDatabase.instance.getPrescriptions();
+    List<dynamic> prescriptions = await PatientDatabase.instance.getPrescriptions(widget.username);
     List<DataRow> rows = [];
     for(List<dynamic> prescription in prescriptions){
       rows.add(DataRow(cells: [

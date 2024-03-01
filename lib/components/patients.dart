@@ -8,7 +8,8 @@ import 'package:healthcord/constants/measures.dart';
 import 'package:sqflite/sqflite.dart';
 
 class patients extends StatefulWidget {
-  const patients({super.key});
+  final String username;
+  const patients({super.key, required this.username});
 
   PatientsState createState() => PatientsState();
 }
@@ -148,7 +149,7 @@ class PatientsState extends State<patients> {
   }
 
   Future<List<DataRow>> getPatientRowData() async {
-    List<dynamic> patients = await PatientDatabase.instance.getPatients();
+    List<dynamic> patients = await PatientDatabase.instance.getPatients(widget.username);
     List<DataRow> rows = [];
     for (List<dynamic> patient in patients) {
       rows.add(DataRow(cells: [
@@ -195,7 +196,7 @@ class PatientsState extends State<patients> {
   );
   }
   Future<List<DataRow>> getFilteredPatientRows(String searchKey) async{
-    List<Map<String, dynamic>> results = await getFilteredPatients(await PatientDatabase.instance.database, searchKey);
+    List<Map<String, dynamic>> results = await getFilteredPatients(await PatientDatabase.instance.database, searchKey, widget.username);
     List<dynamic> rows = [];
     List<DataRow> dataRows = [];
     for (Map<String, dynamic> patient in results){

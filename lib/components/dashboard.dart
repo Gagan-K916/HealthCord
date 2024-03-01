@@ -303,7 +303,29 @@ class _PrescriptionCard3State extends State<PrescriptionCard3>{
 }
 
 
-Widget dashboard(String username){
+class dashboard extends StatefulWidget{
+  final String username;
+  
+  const dashboard({super.key, required this.username});
+
+  dashboardState createState() => dashboardState();
+}
+
+class dashboardState extends State<dashboard>{
+
+  @override
+  Widget build(BuildContext){
+    return FutureBuilder(future: getDashboard(widget.username), builder: (context, snapshot){
+      if(snapshot.hasData){
+        return snapshot.data!;
+      }else{
+        return Center(child: Column(children: [SizedBox(height: 250,),CircularProgressIndicator()]));
+      }
+    });
+  }
+
+  Future<Widget> getDashboard(String username) async{
+  await PatientDatabase.instance.initializeCardData(username);
   return Column(
     children: [
       Padding(
@@ -392,3 +414,5 @@ Widget dashboard(String username){
     )],
   );
 }
+}
+

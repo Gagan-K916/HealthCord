@@ -33,18 +33,6 @@ class PatientDatabase {
     if (tableCount == 0) {
       _database = await _initDB('assets/healthCord.db');
     }
-    
-    totalNoOfPatients = "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT;"))[0]['COUNT(Patient_ID)']}";
-    noOfMalePatients = "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT WHERE Gender = 'Male';"))[0]['COUNT(Patient_ID)']}";
-    noOfFemalePatients = "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT WHERE Gender = 'Female';"))[0]['COUNT(Patient_ID)']}";
-    
-    totalAppointments = "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT;"))[0]['COUNT(Appointment_ID)']}";
-    totalPrescriptions = "${(await _database!.rawQuery("SELECT COUNT(Presc_ID) FROM PRESCRIPTION;"))[0]['COUNT(Presc_ID)']}";
-
-    completedAppointments = "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Completed';"))[0]['COUNT(Appointment_ID)']}";
-    cancelledAppointments = "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Cancelled';"))[0]['COUNT(Appointment_ID)']}";
-    pendingAppointments = "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Scheduled';"))[0]['COUNT(Appointment_ID)']}";
-
     return _database!;
   }
 
@@ -63,10 +51,24 @@ class PatientDatabase {
   return db;
 }
 
+Future<void> initializeCardData(String username) async{
+  totalNoOfPatients = username == "Admin" ? "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT;"))[0]['COUNT(Patient_ID)']}" : "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT WHERE Patient_ID IN (SELECT Patient_ID FROM RELATIONSHIP WHERE Doctor_ID IN (SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%'));"))[0]['COUNT(Patient_ID)']}";
+  noOfMalePatients = username == "Admin" ?  "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT WHERE Gender = 'Male';"))[0]['COUNT(Patient_ID)']}": "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT WHERE Gender = 'Male' AND Patient_ID IN (SELECT Patient_ID FROM RELATIONSHIP WHERE Doctor_ID IN (SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%'));"))[0]['COUNT(Patient_ID)']}";
+  noOfFemalePatients = username == "Admin" ?  "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT WHERE Gender = 'Female';"))[0]['COUNT(Patient_ID)']}" : "${(await _database!.rawQuery("SELECT COUNT(Patient_ID) FROM PATIENT WHERE Gender = 'Female' AND Patient_ID IN (SELECT Patient_ID FROM RELATIONSHIP WHERE Doctor_ID IN (SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%'));"))[0]['COUNT(Patient_ID)']}";;
+  
+  totalAppointments = username == "Admin" ?  "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT;"))[0]['COUNT(Appointment_ID)']}" : "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Doctor_ID IN (SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%');"))[0]['COUNT(Appointment_ID)']}";
+  totalPrescriptions = username == "Admin" ?  "${(await _database!.rawQuery("SELECT COUNT(Presc_ID) FROM PRESCRIPTION;"))[0]['COUNT(Presc_ID)']}" : "${(await _database!.rawQuery("SELECT COUNT(Presc_ID) FROM PRESCRIPTION WHERE Doctor_ID IN (SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%');"))[0]['COUNT(Presc_ID)']}";
 
-  Future<List<dynamic>> getPatients() async {
+  completedAppointments = username == "Admin" ?  "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Completed';"))[0]['COUNT(Appointment_ID)']}" : "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Completed' AND Doctor_ID IN (SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%');"))[0]['COUNT(Appointment_ID)']}";
+  cancelledAppointments = username == "Admin" ?  "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Cancelled';"))[0]['COUNT(Appointment_ID)']}" : "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Cancelled' AND Doctor_ID IN (SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%');"))[0]['COUNT(Appointment_ID)']}";
+  pendingAppointments = username == "Admin" ?  "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Scheduled';"))[0]['COUNT(Appointment_ID)']}": "${(await _database!.rawQuery("SELECT COUNT(Appointment_ID) FROM APPOINTMENT WHERE Status = 'Scheduled' AND Doctor_ID IN (SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%');"))[0]['COUNT(Appointment_ID)']}";
+}
+
+
+  Future<List<dynamic>> getPatients(String username) async {
+    print(totalNoOfPatients);
     final Database db = await database;
-    List<Map<String, dynamic>> results = await db.rawQuery("SELECT * FROM PATIENT");
+    List<Map<String, dynamic>> results = username == "Admin" ? await db.rawQuery("SELECT * FROM PATIENT;") : await db.rawQuery("SELECT * FROM PATIENT WHERE Patient_ID IN (SELECT Patient_ID FROM RELATIONSHIP WHERE Doctor_ID IN (SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%'));");
     List<dynamic> rows = [];
     for (Map<String, dynamic> patient in results){
       rows.add(
@@ -84,9 +86,9 @@ class PatientDatabase {
     return rows;
   }
 
-  Future<List<dynamic>> getAppointments() async {
+  Future<List<dynamic>> getAppointments(String username) async {
     final Database db = await database;
-    List<Map<String, dynamic>> results = await db.rawQuery("SELECT * FROM APPOINTMENT");
+    List<Map<String, dynamic>> results = username == "Admin" ? await db.rawQuery("SELECT * FROM APPOINTMENT;") : await db.rawQuery("SELECT * FROM APPOINTMENT WHERE Doctor_ID IN(SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%');");
     List<dynamic> rows = [];
     for (Map<String, dynamic> appointment in results){
       rows.add(
@@ -103,9 +105,9 @@ class PatientDatabase {
     return rows;
   }
 
-  Future<List<dynamic>> getPrescriptions() async {
+  Future<List<dynamic>> getPrescriptions(String username) async {
     final Database db = await database;
-    List<Map<String, dynamic>> results = await db.rawQuery("SELECT * FROM PRESCRIPTION");
+    List<Map<String, dynamic>> results = username == "Admin" ? await db.rawQuery("SELECT * FROM PRESCRIPTION;") : await db.rawQuery("SELECT  * FROM PRESCRIPTION WHERE Doctor_ID IN(SELECT Doctor_ID FROM DOCTOR WHERE First_Name LIKE '$username%');");
     List<dynamic> rows = [];
     for (Map<String, dynamic> prescription in results){
       rows.add(

@@ -73,7 +73,7 @@ Future <List<Map<String, dynamic>>> getFilteredDoctors(Database db, String searc
 }
 
 Future <bool> isDoctor(Database db,String username, String password) async{
-  return (await db.rawQuery("SELECT First_Name FROM DOCTOR WHERE Email = '$username'")).isNotEmpty;
+  return (await db.rawQuery("SELECT First_Name FROM DOCTOR WHERE Email = '$username' AND Password = '$password'")).isNotEmpty ;
 }
 
 Future<String> getDoctorFirstName(Database db, String username) async{
