@@ -1,3 +1,4 @@
+import 'package:healthcord/components/patients.dart';
 import 'package:sqflite/sqflite.dart';
 
 Future <Database> initializePatients(Database db) async{

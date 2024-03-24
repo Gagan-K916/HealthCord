@@ -20,6 +20,11 @@ class Prescriptions extends StatefulWidget{
 class _PrescriptionsState extends State<Prescriptions>{
   final prescsearchController = TextEditingController();
   final presFilterController = TextEditingController();
+  List<DropdownMenuEntry> patientMenus = [];
+  List<DropdownMenuEntry> doctorMenus = [];
+  List<DropdownMenuEntry> apptidMenus = [];
+  List<String> uniquePatientChecker = [];
+  List<String> uniqueDoctorChecker = [];
 
   Future<List<DataRow>> _prescriptionsRowFuture = Future.value([]);
 
@@ -35,6 +40,37 @@ class _PrescriptionsState extends State<Prescriptions>{
     ));
   }
 
+  Future<List<DropdownMenuEntry>> patientMenuDropDowns() async{
+    List<dynamic> patients = await PatientDatabase.instance.getPatients(widget.username);
+    for (List<dynamic> patient in patients) {
+    if (!uniquePatientChecker.contains(patient[0].toString())) {
+        uniquePatientChecker.add(patient[0].toString());
+        patientMenus.add(DropdownMenuEntry(
+            value: await getPatientName(await PatientDatabase.instance.database,
+                patient[0].toString()),
+            label: await getPatientName(await PatientDatabase.instance.database,
+                patient[0].toString())));
+      }
+    }
+    return patientMenus;
+  }
+
+  Future<List<DropdownMenuEntry>> appointmentMenuDropdowns() async{
+    List<dynamic> appointments = await PatientDatabase.instance.getAppointments(widget.username);
+    for (List<dynamic> appointment in appointments) {
+    if (!uniquePatientChecker.contains(appointment[0].toString())) {
+        uniquePatientChecker.add(appointment[0].toString());
+        apptidMenus.add(DropdownMenuEntry(
+            value: await getPatientName(await PatientDatabase.instance.database,
+                appointment[0].toString()),
+            label: await getPatientName(await PatientDatabase.instance.database,
+                appointment[0].toString())));
+      }
+    }
+    return apptidMenus;
+  }
+
+
   Widget AddPrescriptionPage(){
   final patientNameController = TextEditingController();
   final apptidController = TextEditingController();
@@ -48,34 +84,78 @@ class _PrescriptionsState extends State<Prescriptions>{
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-          DropdownMenu(
-            inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
-            leadingIcon: Icon(Icons.numbers_rounded),
-            hintText: "Appointment ID",
-            width: 640,
-            controller: apptidController,
-            dropdownMenuEntries: [
-              DropdownMenuEntry(value: '1', label: '1'),
-              DropdownMenuEntry(value: '2', label: '2')
-            ],),
-          DropdownMenu(
-            inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
-            leadingIcon: Icon(Icons.person_2_rounded),
-            hintText: "Patient Name",
-            width: 640,
-            controller: patientNameController,
-            dropdownMenuEntries: [
-              DropdownMenuEntry(value: 'Patient1', label: 'Patient1')
-            ],),
+          FutureBuilder(
+              future: appointmentMenuDropdowns(),
+              builder: ((context, snapshot) {
+                if(snapshot.hasData){
+                return DropdownMenu(
+                  enableFilter: true,
+                  inputDecorationTheme: InputDecorationTheme(
+                      outlineBorder:
+                          BorderSide(width: 1, style: BorderStyle.solid)),
+                  leadingIcon: Icon(Icons.numbers_outlined),
+                  hintText: "Appointment ID",
+                  width: 640,
+                  controller: apptidController,
+                  dropdownMenuEntries: apptidMenus,
+                  menuHeight: 200,
+                  textStyle: GoogleFonts.rubik());
+                }else{return DropdownMenu(
+                  enableFilter: true,
+                  inputDecorationTheme: InputDecorationTheme(
+                      outlineBorder:
+                          BorderSide(width: 1, style: BorderStyle.solid)),
+                  leadingIcon: Icon(Icons.numbers_outlined),
+                  hintText: "Appointment ID",
+                  width: 640,
+                  controller: apptidController,
+                  dropdownMenuEntries: apptidMenus,
+                  menuHeight: 200,
+                  textStyle: GoogleFonts.rubik());}
+              }),
+            ),
+          FutureBuilder(
+              future: patientMenuDropDowns(),
+              builder: ((context, snapshot) {
+                if(snapshot.hasData){
+                return DropdownMenu(
+                  enableFilter: true,
+                  inputDecorationTheme: InputDecorationTheme(
+                      outlineBorder:
+                          BorderSide(width: 1, style: BorderStyle.solid)),
+                  leadingIcon: Icon(Icons.person_2_rounded),
+                  hintText: "Patient Name",
+                  width: 640,
+                  controller: patientNameController,
+                  dropdownMenuEntries: patientMenus,
+                  menuHeight: 200,
+                  textStyle: GoogleFonts.rubik());
+                }else{return DropdownMenu(
+                  enableFilter: true,
+                  inputDecorationTheme: InputDecorationTheme(
+                      outlineBorder:
+                          BorderSide(width: 1, style: BorderStyle.solid)),
+                  leadingIcon: Icon(Icons.person_2_rounded),
+                  hintText: "Patient Name",
+                  width: 640,
+                  controller: patientNameController,
+                  dropdownMenuEntries: patientMenus,
+                  menuHeight: 200,
+                  textStyle: GoogleFonts.rubik());}
+              }),
+            ),
             DropdownMenu(
-            inputDecorationTheme: InputDecorationTheme(outlineBorder: BorderSide(width: 1, style: BorderStyle.solid)),
-            leadingIcon: Icon(Icons.person_2_rounded),
-            hintText: "Doctor Name",
-            width: 640,
-            controller: doctorNameController,
-            dropdownMenuEntries: [
-              DropdownMenuEntry(value: 'Shastry', label: 'Shastry')
-            ],),
+                enableFilter: true,
+                inputDecorationTheme: InputDecorationTheme(
+                    outlineBorder:
+                        BorderSide(width: 1, style: BorderStyle.solid)),
+                leadingIcon: Icon(Icons.person_2_rounded),
+                hintText: "Doctor Name",
+                width: 640,
+                controller: doctorNameController,
+                dropdownMenuEntries: widget.username == "Admin" ? doctorMenus : [DropdownMenuEntry(value: widget.username, label: widget.username)],
+                menuHeight: 300,
+                textStyle: GoogleFonts.rubik()),
           TextField(
             controller: medicationController ,
             decoration: InputDecoration(
@@ -226,6 +306,15 @@ void fieldAlert() {
         DataCell(Text(prescription[5].toString())),
         DataCell(Text(prescription[6].toString()))
       ]));
+
+      if (!uniqueDoctorChecker.contains(prescription[2].toString())) {
+        uniqueDoctorChecker.add(prescription[1].toString());
+        doctorMenus.add(DropdownMenuEntry(
+            value: await getDoctorName(await PatientDatabase.instance.database,
+                prescription[1].toString()),
+            label: await getDoctorName(await PatientDatabase.instance.database,
+                prescription[1].toString())));
+      }
     }
     return rows;
   }

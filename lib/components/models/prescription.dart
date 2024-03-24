@@ -17,15 +17,15 @@ Future<Database> initializePrescription(Database db) async{
 
   await db.execute(
     '''
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 1, 1, 'Aspirin', '10mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 2, 2, 'Ibuprofen', '200mg', 'Twice daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 3, 3, 'Metoprolol', '50mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 4, 4, 'Cetirizine', '10mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 5, 5, 'Gabapentin', '300mg', 'Three timesdaily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 6, 6, 'Ibuprofen', '200mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 7, 7, 'Aspirin', '10mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 8, 8, 'Hydrocortisone', '1%', 'Apply a needed');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 9, 9, 'Topiramate', '50mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES  (1, 1, 1, 'Aspirin', '10mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES  (2, 2, 2, 'Ibuprofen', '200mg', 'Twice daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES  (1, 3, 3, 'Metoprolol', '50mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES  (4, 4, 4, 'Cetirizine', '10mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES  (5, 5, 5, 'Gabapentin', '300mg', 'Three timesdaily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES  (2, 6, 6, 'Ibuprofen', '200mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES  (3, 7, 7, 'Aspirin', '10mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES  (4, 8, 8, 'Hydrocortisone', '1%', 'Apply a needed');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES  (5, 9, 9, 'Topiramate', '50mg', 'Once daily');
     INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 10, 10, 'Aspirin', '10mg', 'Once daily');
     INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 11, 11, 'Atorvastatin', '20mg', 'Once daily');
     INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 12, 12, 'Lisinopril', '10mg', 'Once daily');
@@ -71,22 +71,22 @@ Future<Database> initializePrescription(Database db) async{
     INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 52, 52, 'Fluticasone', '50mcg', 'Once daily');
     INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 53, 53, 'Doxepin', '25mg', 'Once daily');
     INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 54, 54, 'Budesonide', '0.5mg', 'Twice daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 55, 55, 'Lorazepam', '1mg', 'As needed');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 56, 56, 'Celecoxib', '200mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 57, 57, 'Amphetamine', '5mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 58, 58, 'Diphenhydramine', '25mg', 'As needed');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 59, 59, 'Methylphenidate', '10mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 60, 60, 'Modafinil', '100mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 61, 61, 'Lamotrigine', '25mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 62, 62, 'Meloxicam', '7.5mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 63, 63, 'Paroxetine', '20mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 64, 64, 'Venlafaxine', '150mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 65, 65, 'Desvenlafaxine', '50mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 66, 66, 'Tramadol', '100mg', 'As needed');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 67, 67, 'Doxazosin', '1mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 68, 68, 'Dicyclomine', '10mg', 'Three times daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 69, 69, 'Lisdexamfetamine', '30mg', 'Once daily');
-    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 70, 70, 'Atomoxetine', '40mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 15, 55, 'Lorazepam', '1mg', 'As needed');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 16, 56, 'Celecoxib', '200mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 17, 57, 'Amphetamine', '5mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 18, 58, 'Diphenhydramine', '25mg', 'As needed');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 19, 59, 'Methylphenidate', '10mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 10, 60, 'Modafinil', '100mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 31, 61, 'Lamotrigine', '25mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (1, 32, 62, 'Meloxicam', '7.5mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 33, 63, 'Paroxetine', '20mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (2, 34, 64, 'Venlafaxine', '150mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 35, 65, 'Desvenlafaxine', '50mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (3, 36, 66, 'Tramadol', '100mg', 'As needed');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 37, 67, 'Doxazosin', '1mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (4, 38, 68, 'Dicyclomine', '10mg', 'Three times daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 39, 69, 'Lisdexamfetamine', '30mg', 'Once daily');
+    INSERT INTO PRESCRIPTION (Doctor_ID, Patient_ID, Appointment_ID, Medication, Dosage, Frequency) VALUES (5, 30, 70, 'Atomoxetine', '40mg', 'Once daily');
 
 '''
   );

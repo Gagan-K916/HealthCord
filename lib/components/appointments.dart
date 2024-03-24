@@ -33,7 +33,6 @@ class _AppointmentsState extends State<Appointments> {
 
   Future<List<DataRow>> getAppointmentRowData() async {
     List<dynamic> appointments = await PatientDatabase.instance.getAppointments(widget.username);
-    print(appointments);
     List<DataRow> rows = [];
     for (List<dynamic> appointment in appointments) {
       rows.add(DataRow(cells: [
@@ -98,6 +97,21 @@ class _AppointmentsState extends State<Appointments> {
     );
   }
 
+  Future<List<DropdownMenuEntry>> patientMenuDropDowns() async{
+    List<dynamic> patients = await PatientDatabase.instance.getPatients(widget.username);
+    for (List<dynamic> patient in patients) {
+    if (!uniquePatientChecker.contains(patient[0].toString())) {
+        uniquePatientChecker.add(patient[0].toString());
+        patientMenus.add(DropdownMenuEntry(
+            value: await getPatientName(await PatientDatabase.instance.database,
+                patient[0].toString()),
+            label: await getPatientName(await PatientDatabase.instance.database,
+                patient[0].toString())));
+      }
+    }
+    return patientMenus;
+  }
+
   Widget AddAppointmentPage() {
     final apptDateController = TextEditingController();
     final patientNameController = TextEditingController();
@@ -111,18 +125,36 @@ class _AppointmentsState extends State<Appointments> {
         height: double.maxFinite,
         child: Column(
           children: [
-            DropdownMenu(
-                enableFilter: true,
-                inputDecorationTheme: InputDecorationTheme(
-                    outlineBorder:
-                        BorderSide(width: 1, style: BorderStyle.solid)),
-                leadingIcon: Icon(Icons.person_2_rounded),
-                hintText: "Patient Name",
-                width: 640,
-                controller: patientNameController,
-                dropdownMenuEntries: patientMenus,
-                menuHeight: 200,
-                textStyle: GoogleFonts.rubik()),
+            FutureBuilder(
+              future: patientMenuDropDowns(),
+              builder: ((context, snapshot) {
+                if(snapshot.hasData){
+                return DropdownMenu(
+                  enableFilter: true,
+                  inputDecorationTheme: InputDecorationTheme(
+                      outlineBorder:
+                          BorderSide(width: 1, style: BorderStyle.solid)),
+                  leadingIcon: Icon(Icons.person_2_rounded),
+                  hintText: "Patient Name",
+                  width: 640,
+                  controller: patientNameController,
+                  dropdownMenuEntries: patientMenus,
+                  menuHeight: 200,
+                  textStyle: GoogleFonts.rubik());
+                }else{return DropdownMenu(
+                  enableFilter: true,
+                  inputDecorationTheme: InputDecorationTheme(
+                      outlineBorder:
+                          BorderSide(width: 1, style: BorderStyle.solid)),
+                  leadingIcon: Icon(Icons.person_2_rounded),
+                  hintText: "Patient Name",
+                  width: 640,
+                  controller: patientNameController,
+                  dropdownMenuEntries: patientMenus,
+                  menuHeight: 200,
+                  textStyle: GoogleFonts.rubik());}
+              }),
+            ),
             TextField(
                 controller: apptDateController,
                 decoration: InputDecoration(
@@ -139,7 +171,7 @@ class _AppointmentsState extends State<Appointments> {
                 hintText: "Doctor Name",
                 width: 640,
                 controller: doctorNameController,
-                dropdownMenuEntries: doctorMenus,
+                dropdownMenuEntries: widget.username == "Admin" ? doctorMenus : [DropdownMenuEntry(value: widget.username, label: widget.username)],
                 menuHeight: 300,
                 textStyle: GoogleFonts.rubik()),
             TextField(
@@ -379,7 +411,7 @@ class _AppointmentsState extends State<Appointments> {
             future: _appointmentsRowFuture,
             builder: (context, snapshot) {
               try{
-              if (snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.done){
                 return Container(
                   height: 542,
                   child: ClipRRect(
