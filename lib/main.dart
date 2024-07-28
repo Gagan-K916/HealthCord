@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthcord/components/database.dart';
 import 'package:healthcord/components/landingPage.dart';
-import 'package:healthcord/components/login.dart';
-import 'components/home.dart';
 
 
 void main() async{

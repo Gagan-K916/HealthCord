@@ -9,7 +9,6 @@ import '../constants/measures.dart';
 import 'dashboard.dart';
 import 'appointments.dart';
 import 'prescriptions.dart';
-import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
