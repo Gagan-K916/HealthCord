@@ -69,6 +69,7 @@ class LoginState extends State<LoginPage>{
                 ],),
                 SizedBox(height: 60),
                 Text("WELCOME", style: GoogleFonts.teko(fontSize: 80, color: Colors.white, decoration: TextDecoration.underline, decorationColor: Colors.white), ),
+                Text("Test Username: 'Admin'; Password: 'password'", style: GoogleFonts.ptSans(fontSize: 15, color: Colors.white), ),
                 TextField(controller: usernameController,style: TextStyle(color: Colors.white) ,decoration: InputDecoration(labelStyle: TextStyle(color: secondaryColor),focusColor: Colors.white,hoverColor: secondaryColor ,iconColor: Colors.white,fillColor: Colors.white,icon: Icon(Icons.person_2_outlined) ,labelText: "Username", constraints: BoxConstraints(maxWidth: 600)), ),
                 SizedBox(height: 20,),
                 TextField(controller: passwordController,style: TextStyle(color: Colors.white) ,decoration: InputDecoration(labelStyle: TextStyle(color: secondaryColor),focusColor: Colors.white,hoverColor: secondaryColor ,iconColor: Colors.white,fillColor: Colors.white,icon: Icon(Icons.lock_open_outlined) ,labelText: "Password", constraints: BoxConstraints(maxWidth: 600)), ),

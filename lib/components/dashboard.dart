@@ -311,7 +311,7 @@ class dashboard extends StatefulWidget{
   dashboardState createState() => dashboardState();
 }
 
-class dashboardState extends State<dashboard>{
+class dashboardState extends State<dashboard >{
 
   @override
   Widget build(BuildContext){
