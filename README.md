@@ -41,6 +41,9 @@ The dashboard provides doctors with critical insights:
 3. Prescription Trends
 4. Colleague Specialization Distribution
 
+[![image](https://github.com/user-attachments/assets/4970d191-5c3a-424e-9e84-990e061ccdd6)](https://healthcord.netlify.app/)
+
+
 These analytics are powered by SQL queries, transforming raw data into actionable insights. The dashboard leverages advanced SQL techniques such as subqueries, and aggregations to process and visualize large datasets effectively.
 
 ## Key Technical Aspects
