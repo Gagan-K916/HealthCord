@@ -11,6 +11,10 @@
 
 HealthCord is a comprehensive patient and health record management system designed to streamline healthcare operations and enhance patient care. This application provides healthcare professionals with an intuitive interface to manage patient data, appointments, prescriptions, and collaborate with colleagues efficiently.
 
+You can view the project using this [link](https://healthcord.netlify.app/).
+
+**System Requirements:** This application is optimized for desktop environments. For the best experience, please access the project using a computer or laptop.
+
 [![image](https://github.com/user-attachments/assets/70c88f24-e0cf-4d68-8afe-91ba81165a62)](https://healthcord.netlify.app/)
 
 ## Features
