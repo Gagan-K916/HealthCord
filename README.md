@@ -31,7 +31,8 @@ HealthCord is a comprehensive patient and health record management system design
 
 ## Dashboard Insights
 
-[![Uploading image.png…]()]
+[![image](https://github.com/user-attachments/assets/e72e0b8b-e91b-4223-bc74-f6d6bd531eec)](https://healthcord.netlify.app/)
+
 
 The dashboard provides doctors with critical insights:
 
@@ -40,7 +41,7 @@ The dashboard provides doctors with critical insights:
 3. Prescription Trends
 4. Colleague Specialization Distribution
 
-These analytics are powered by complex SQL queries, demonstrating the system's capability to process and visualize large datasets effectively.
+These analytics are powered by SQL queries, transforming raw data into actionable insights. The dashboard leverages advanced SQL techniques such as subqueries, and aggregations to process and visualize large datasets effectively.
 
 ## Key Technical Aspects
 
@@ -51,22 +52,31 @@ These analytics are powered by complex SQL queries, demonstrating the system's c
 
 ## Installation and Setup
 
-(Include steps to set up and run the project locally)
+The project is hosted on the cloud using Netlify, and you can view it using this [link](https://healthcord.netlify.app/).
+
+<abbr>OR</abbr>
+
+To get HealthCord up and running on your local machine, follow these steps:
+
+### Prerequisites
+
+- [Flutter](https://flutter.dev/docs/get-started/install)
+- [Dart](https://dart.dev/get-dart)
+- [Git](https://git-scm.com/downloads)
+- [Python](https://www.python.org/downloads/)
+- [SQLite](https://www.sqlite.org/download.html)
+
+### Cloning the Repository
+
+1. Open your terminal or command prompt.
+2. Navigate to the directory where you want to clone the project.
+3. Run the following command: 
+   ```git clone https://github.com/Gagan-K916/HealthCord.git```
+4. Once you are done installing the prerequisistes, navigate into the project directory and run the code: ```flutter run -d chrome```
 
 ## Future Enhancements
 
 - Integration with external health record systems
 - Implementation of machine learning models for predictive health analytics
-- Enhanced security features including end-to-end encryption
-
-## Contributing
-
-We welcome contributions to HealthCord! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more details.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
----
-
-HealthCord showcases the power of modern app development combined with robust database management, providing a seamless solution for healthcare professionals to manage patient care effectively.
+- Integration of Real-Time Messaging for better communication.
+- Adding an AI Chatbot fine-tuned to answer health related queries
