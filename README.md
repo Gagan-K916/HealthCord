@@ -78,8 +78,11 @@ To get HealthCord up and running on your local machine, follow these steps:
 1. Open your terminal or command prompt.
 2. Navigate to the directory where you want to clone the project.
 3. Run the following command: 
-   ```git clone https://github.com/Gagan-K916/HealthCord.git```
-4. Once you are done installing the prerequisistes, navigate into the project directory and run the code: ```flutter run -d chrome```
+   ```bash
+   git clone https://github.com/Gagan-K916/HealthCord.git
+5. Once you are done installing the prerequisistes, navigate into the project directory and run the code:
+   ```bash
+   flutter run -d chrome
 
 ## Future Enhancements
 
